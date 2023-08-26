@@ -11,7 +11,7 @@
 
     <name>JoltingTrims</name>
 
-    <description>A stylish way to manage your armor trims!</description>
+    <description>Your stylish way of selecting a new cool trim for your armor!</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
