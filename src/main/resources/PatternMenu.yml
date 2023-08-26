@@ -1,0 +1,99 @@
+#########################################################
+#                Pattern GUI Menu File                  #
+#                                                       #
+#                    Author: Skript                     #
+#########################################################
+
+# GUI Title
+menu-title: '&8&lPattern Menu'
+
+# GUI Size
+menu-size: 54
+
+# Configuration of any Pattern Item shown in the GUI
+patterns-name: '&e&l%PATTERN%'
+patterns-lore:
+  - '&e• &7Unlocked %PERMISSION%'
+
+# The lore results if the player has the permission or not
+pattern-locked: '&c&lNo'
+pattern-unlocked: '&a&lYes'
+
+# The sounds played whenever a player clicks on a locker or unlocked item
+# Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+pattern-locked-sound: BLOCK_ANVIL_LAND
+pattern-unlocked-sound: ENTITY_EXPERIENCE_ORB_PICKUP
+
+# Sound that will be played when player clicks on any button item
+button-click-sound: ITEM_BOOK_PAGE_TURN
+
+# Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
+# Available Types: FILLER, CLEAR_PATTERN, GENERAL_MENU_OPENER
+# Pattern types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/meta/trim/TrimPattern.html
+Layout:
+  Filler-Item-1:
+    type: FILLER
+    material: BLACK_STAINED_GLASS_PANE
+    name: '&7'
+    lore:
+      - '&7'
+    slots:
+      - 0
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 26
+      - 27
+      - 35
+      - 36
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+  Filler-Item-2:
+    type: FILLER
+    material: WHITE_STAINED_GLASS_PANE
+    name: '&7'
+    lore:
+      - '&7'
+    slots:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 6
+      - 7
+      - 37
+      - 38
+      - 42
+      - 43
+  Clear-Item-1:
+    type: CLEAR_PATTERN
+    material: BARRIER
+    name: '&e&lClear Armor Pattern'
+    lore:
+      - '&7Click here to clear current pattern!'
+    slots:
+      - 40
+  Back-Item-1:
+    type: GENERAL_MENU_OPENER
+    material: IRON_DOOR
+    name: '&c&lBack'
+    lore:
+      - '&7Click here to go on the previous menu!'
+    slots:
+      - 4

@@ -1,0 +1,10 @@
+name: JoltingTrims
+version: '${project.version}'
+main: me.skript.joltingtrims.JoltingTrims
+api-version: 1.20
+authors: [ Skript ]
+description: A stylish way to manage your armor trims!
+commands:
+  trim:
+    description: Main command of the armor trimming settings!
+    usage: /<command>

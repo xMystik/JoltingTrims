@@ -1,0 +1,99 @@
+#########################################################
+#                 General GUI Menu File                 #
+#                                                       #
+#                    Author: Skript                     #
+#########################################################
+
+# GUI Title
+menu-title: '&8&lGeneral Menu'
+
+# GUI Size
+menu-size: 36
+
+# The slot that the edited item will be shown
+item-slot: 4
+
+# The sounds played whenever a player clicks on a button item on the menu
+# Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+button-click-sound: ITEM_BOOK_PAGE_TURN
+apply-changes-success-sound: ENTITY_PLAYER_LEVELUP
+apply-changes-failure-sound: BLOCK_DISPENSER_FAIL
+
+# Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
+# Available Types: FILLER, MATERIAL_MENU_OPENER, PATTERN_MENU_OPENER, FINALIZE_CHANGES
+Layout:
+  Filler-Item-1:
+    type: FILLER
+    material: BLACK_STAINED_GLASS_PANE
+    model: 0
+    name: '&7'
+    lore:
+      - '&7'
+    slots:
+      - 0
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 26
+      - 27
+      - 28
+      - 29
+      - 30
+      - 31
+      - 32
+      - 33
+      - 34
+      - 35
+  Filler-Item-2:
+    type: FILLER
+    material: WHITE_STAINED_GLASS_PANE
+    model: 0
+    name: '&7'
+    lore:
+      - '&7'
+    slots:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 6
+      - 7
+      - 19
+      - 21
+      - 23
+      - 25
+  Material-Menu-Item:
+    type: MATERIAL_MENU_OPENER
+    material: QUARTZ
+    model: 0
+    name: '&e&lMaterial Menu'
+    lore:
+      - '&7Click here to select a material!'
+    slots:
+      - 20
+  Pattern-Menu-Item:
+    type: PATTERN_MENU_OPENER
+    material: VEX_ARMOR_TRIM_SMITHING_TEMPLATE
+    model: 0
+    name: '&e&lPattern Menu'
+    lore:
+      - '&7Click here to select a pattern!'
+    slots:
+      - 24
+  Finalize-Menu-Item:
+    type: FINALIZE_CHANGES
+    material: NETHERITE_UPGRADE_SMITHING_TEMPLATE
+    model: 0
+    name: '&a&lApply Changes'
+    lore:
+      - '&7Click here to apply the changes!'
+    slots:
+      - 22

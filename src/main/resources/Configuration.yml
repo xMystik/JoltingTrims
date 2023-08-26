@@ -1,0 +1,107 @@
+#########################################################
+#               Plugin Configuration File               #
+#                                                       #
+#                    Author: Skript                     #
+#########################################################
+
+# Enabling this option makes it so right-clicking a smithing table opens up the general menu
+replace-smithing-table: true
+
+# Enabling this option allows the users to open the main menu through the /trim menu command
+trim-command: true
+
+# Enabling this option requires the player to have certain permissions to use each specific pattern
+pattern-perms: true
+
+# Enabling this option requires the player to have certain permissions to use each specific material
+material-perms: true
+
+# Enabling this option allows the player to hear sounds depending on which item he clicks on the plugin menus
+sounds-enabled: true
+
+# Enable toast message on successful trim application
+toast-enabled: true
+
+# Trims Configuration Section
+Patterns:
+  SENTRY:
+    enabled: true
+    permission: joltingtrims.pattern.sentry
+  VEX:
+    enabled: true
+    permission: joltingtrims.pattern.vex
+  WILD:
+    enabled: true
+    permission: joltingtrims.pattern.wild
+  COAST:
+    enabled: true
+    permission: joltingtrims.pattern.coast
+  DUNE:
+    enabled: true
+    permission: joltingtrims.pattern.dune
+  WAYFINDER:
+    enabled: true
+    permission: joltingtrims.pattern.wayfinder
+  RAISER:
+    enabled: true
+    permission: joltingtrims.pattern.raiser
+  SHAPER:
+    enabled: true
+    permission: joltingtrims.pattern.shaper
+  HOST:
+    enabled: true
+    permission: joltingtrims.pattern.host
+  WARD:
+    enabled: true
+    permission: joltingtrims.pattern.ward
+  SILENCE:
+    enabled: true
+    permission: joltingtrims.pattern.silence
+  TIDE:
+    enabled: true
+    permission: joltingtrims.pattern.tide
+  SNOUT:
+    enabled: true
+    permission: joltingtrims.pattern.snout
+  RIB:
+    enabled: true
+    permission: joltingtrims.pattern.rib
+  EYE:
+    enabled: true
+    permission: joltingtrims.pattern.eye
+  SPIRE:
+    enabled: true
+    permission: joltingtrims.pattern.spire
+
+# Materials Configuration Section
+Materials:
+  AMETHYST_SHARD:
+    enabled: true
+    permission: joltingtrims.material.amethyst
+  COPPER_INGOT:
+    enabled: true
+    permission: joltingtrims.material.copper
+  DIAMOND:
+    enabled: true
+    permission: joltingtrims.material.diamond
+  GOLD_INGOT:
+    enabled: true
+    permission: joltingtrims.material.gold
+  EMERALD:
+    enabled: true
+    permission: joltingtrims.material.emerald
+  IRON_INGOT:
+    enabled: true
+    permission: joltingtrims.material.iron
+  LAPIS_LAZULI:
+    enabled: true
+    permission: joltingtrims.material.lapis
+  NETHERITE_INGOT:
+    enabled: true
+    permission: joltingtrims.material.netherite
+  QUARTZ:
+    enabled: true
+    permission: joltingtrims.material.quartz
+  REDSTONE:
+    enabled: true
+    permission: joltingtrims.material.redstone

@@ -1,0 +1,90 @@
+#########################################################
+#                Material GUI Menu File                 #
+#                                                       #
+#                    Author: Skript                     #
+#########################################################
+
+# GUI Title
+menu-title: '&8&lMaterial Menu'
+
+# GUI Size
+menu-size: 45
+
+# Configuration of any Material Item shown in the GUI
+materials-name: '&e&l%MATERIAL%'
+materials-lore:
+  - '&e• &7Unlocked %PERMISSION%'
+
+# The lore results if the player has the permission or not
+material-locked: '&c&lNo'
+material-unlocked: '&a&lYes'
+
+# The sounds played whenever a player clicks on a locker or unlocked item
+# Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+material-locked-sound: BLOCK_ANVIL_LAND
+material-unlocked-sound: ENTITY_EXPERIENCE_ORB_PICKUP
+
+# Sound that will be played when player clicks on any button item
+button-click-sound: ITEM_BOOK_PAGE_TURN
+
+# Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
+# Available Types: FILLER, GENERAL_MENU_OPENER
+# Material types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/meta/trim/TrimMaterial.html
+Layout:
+  Filler-Item-1:
+    type: FILLER
+    material: BLACK_STAINED_GLASS_PANE
+    model: 0
+    name: '&7'
+    lore:
+      - '&7'
+    slots:
+      - 0
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 26
+      - 27
+      - 35
+      - 36
+      - 37
+      - 38
+      - 39
+      - 40
+      - 41
+      - 42
+      - 43
+      - 44
+  Filler-Item-2:
+    type: FILLER
+    material: WHITE_STAINED_GLASS_PANE
+    name: '&7'
+    lore:
+      - '&7'
+    slots:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 6
+      - 7
+      - 28
+      - 29
+      - 33
+      - 34
+  Back-Item-1:
+    type: GENERAL_MENU_OPENER
+    material: IRON_DOOR
+    name: '&c&lBack'
+    lore:
+      - '&7Click here to go on the previous menu!'
+    slots:
+      - 4
