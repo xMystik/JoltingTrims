@@ -23,12 +23,14 @@ public final class JoltingTrims extends JavaPlugin {
     private ConfigFile materialMenu;
     private ConfigFile patternMenu;
 
+    private static final String REQUIRED_VERSION = "1.20";
+
     @Override
     public void onEnable() {
 
-        if(!Bukkit.getServer().getVersion().contains("1.20")) {
+        if(!Bukkit.getServer().getVersion().contains(REQUIRED_VERSION)) {
+            Bukkit.getConsoleSender().sendMessage(JLib.format("&3&l[JoltingTrims] &7Server version is not supported."));
             Bukkit.getPluginManager().disablePlugin(this);
-            Bukkit.getConsoleSender().sendMessage(JLib.format("&3&l[JoltingTrims] &7Plugin was disabled cause of server version."));
         }
         else {
 
