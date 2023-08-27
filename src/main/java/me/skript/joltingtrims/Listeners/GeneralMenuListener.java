@@ -33,6 +33,7 @@ public class GeneralMenuListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onGeneralMenuClick(InventoryClickEvent event) {
+
         if (event.getClickedInventory() == null || event.getCurrentItem() == null) {
             return;
         }
@@ -42,8 +43,10 @@ public class GeneralMenuListener implements Listener {
 
             event.setCancelled(true);
 
+            // Handle all the Item movement clicks
             handleItemMovement(event, player);
 
+            // Handle all the other Items on the menu
             handleOtherInteractions(event, player, event.getView().getTopInventory());
         }
     }
@@ -100,32 +103,26 @@ public class GeneralMenuListener implements Listener {
                     // Checks if the material is anything else but none
                     // Checks if the slots of the specified Item are the ones that were triggered on the InventoryClickEvent
                     if (!"none".equals(materialName) && slots.contains(event.getSlot())) {
-                        handleItemTypeInteraction(player, type, itemSection, topInventory);
+                        handleItemTypeInteraction(player, type, topInventory);
                     }
                 }
             }
         }
     }
 
-    private void handleItemTypeInteraction(Player player, String itemType, ConfigurationSection itemSection, Inventory topInventory) {
+    private void handleItemTypeInteraction(Player player, String itemType, Inventory topInventory) {
         // Checks the Item's interaction type
         Sound buttonSound = Sound.valueOf(plugin.getGeneralMenuFile().getString("button-click-sound"));
 
         if (itemType.equals(ItemType.MATERIAL_MENU_OPENER.getString())) {
 
             new MaterialMenu().openMenu(player);
-
-            if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                player.playSound(player, buttonSound, 1.0f, 1.0f);
-            }
+            JLib.playSound(player, buttonSound);
 
         } else if (itemType.equals(ItemType.PATTERN_MENU_OPENER.getString())) {
 
             new PatternMenu().openMenu(player);
-
-            if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                player.playSound(player, buttonSound, 1.0f, 1.0f);
-            }
+            JLib.playSound(player, buttonSound);
 
         } else if (itemType.equals(ItemType.FINALIZE_CHANGES.getString())) {
             // Gets the item on the specified item slot
@@ -163,15 +160,17 @@ public class GeneralMenuListener implements Listener {
         Player player = (Player) event.getPlayer();
         ItemStack editItem = event.getInventory().getItem(plugin.getGeneralMenuFile().getInt("item-slot"));
 
+        // Check if InventoryClose was caused to open a new Inventory
         if(event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
             if(inventoryTitle.equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JLib.isArmorPiece(editItem.getType())) {
                 DataManager.getOrCreatePlayerData(player).setEditingItem(editItem);
             }
         }
+        // Check if the reason is the plugin /reload command
         else if(event.getReason().equals(InventoryCloseEvent.Reason.PLUGIN)) {
-            // Check if the reason is the plugin /reload command
+            // Check if the files are reloading
             if(DataManager.isReloading()) {
-                // If it is then check if the player's saved item is not null
+                // If they are then check if the player's saved item is not null
                 if(DataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
                     // If its not null then give the item back to the player
                     player.getInventory().addItem(DataManager.getOrCreatePlayerData(player).getEditingItem());

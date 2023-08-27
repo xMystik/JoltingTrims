@@ -34,15 +34,17 @@ public class DataManager {
     }
 
     public static void closeAllMenus() {
+        // Loop through all the online players
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            // Get their open inventory if there is any
             InventoryView openInventory = onlinePlayer.getOpenInventory();
 
-            // Check if the open inventory is related to your plugin
+            // Check if the opened inventory is one of the plugin's menus
             if (openInventory.getTitle().equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title"))) ||
                     openInventory.getTitle().equals(JLib.format(plugin.getMaterialMenuFile().getString("menu-title"))) ||
                     openInventory.getTitle().equals(JLib.format(plugin.getPatternMenuFile().getString("menu-title")))) {
 
-                // Close the open inventory
+                // Close the opened inventory
                 onlinePlayer.closeInventory();
             }
         }

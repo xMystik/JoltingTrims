@@ -16,6 +16,7 @@ public class GeneralMenu {
         Inventory inv = Bukkit.createInventory(player, plugin.getGeneralMenuFile().getInt("menu-size"), JLib.format(plugin.getGeneralMenuFile().getString("menu-title")));
 
         ConfigurationSection layoutSection = plugin.getGeneralMenuFile().getConfigurationSection("Layout");
+
         JLib.setupInventoryLayout(layoutSection, inv);
 
         DataManager.getOrCreatePlayerData(player);

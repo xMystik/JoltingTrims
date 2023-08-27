@@ -5,9 +5,6 @@ import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Menus.GeneralMenu;
 import me.skript.joltingtrims.Utilities.*;
 import me.skript.joltingtrims.Utilities.Enums.ItemType;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,8 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -33,12 +28,29 @@ public class MaterialMenuListener implements Listener {
 
     @EventHandler
     public void onMaterialMenuClick(InventoryClickEvent event) {
+        //Inventory clickedInventory = event.getClickedInventory();
+        //String inventoryTitle = event.getView().getTitle();
         ItemStack clickedItem = event.getCurrentItem();
-        Inventory clickedInventory = event.getClickedInventory();
-        String inventoryTitle = event.getView().getTitle();
         Player player = (Player) event.getWhoClicked();
 
-        if(clickedInventory != null && clickedItem != null && clickedInventory.getType() != InventoryType.CREATIVE && inventoryTitle.equals(JLib.format(plugin.getMaterialMenuFile().getString("menu-title")))) {
+        if (!(event.getClickedInventory() != null
+                && event.getCurrentItem() != null
+                && event.getClickedInventory().getType() != InventoryType.CREATIVE
+                && event.getView().getTitle().equals(JLib.format(plugin.getMaterialMenuFile().getString("menu-title"))))) {
+            return;
+        }
+
+        event.setCancelled(true);
+
+        // Handle the Layout Item clicks
+        handleLayoutItemClick(player, clickedItem);
+
+        // Handle the Material Item clicks
+        handleMaterialItemClick(player, clickedItem);
+
+
+
+        /*if(clickedInventory != null && clickedItem != null && clickedInventory.getType() != InventoryType.CREATIVE && inventoryTitle.equals(JLib.format(plugin.getMaterialMenuFile().getString("menu-title")))) {
             event.setCancelled(true);
 
             ConfigurationSection layoutSection = plugin.getMaterialMenuFile().getConfigurationSection("Layout");
@@ -133,6 +145,82 @@ public class MaterialMenuListener implements Listener {
                         }
                     }
                 }
+            }
+        }*/
+    }
+
+    private void handleLayoutItemClick(Player player, ItemStack clickedItem) {
+        // Get the Layout section
+        ConfigurationSection layoutSection = plugin.getMaterialMenuFile().getConfigurationSection("Layout");
+
+        // Check if it exists
+        if (layoutSection != null) {
+            // Get the children of Layout
+            for (String itemName : layoutSection.getKeys(false)) {
+                // Get their name
+                ConfigurationSection itemSection = layoutSection.getConfigurationSection(itemName);
+
+                // Check if they exist
+                if (itemSection != null) {
+                    // If they do then get their type, material and slots
+                    String type = itemSection.getString("type");
+                    String materialName = itemSection.getString("material");
+                    List<Integer> slots = itemSection.getIntegerList("slots");
+
+                    // Check if it's a valid item section and the clicked item is a config item
+                    if (JLib.isValidItemSection(materialName, slots) && JLib.isConfigItem(clickedItem, itemSection)) {
+                        if (type.equals(ItemType.GENERAL_MENU_OPENER.getString())) {
+                            new GeneralMenu().openMenu(player);
+                            JLib.playSound(player, plugin.getMaterialMenuFile().getString("button-click-sound"));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void handleMaterialItemClick(Player player, ItemStack clickedItem) {
+        ConfigurationSection materialSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
+
+        // Check if the materials section exists
+        if (materialSection != null) {
+            // Get each child of the Materials section
+            for (String matName : materialSection.getKeys(false)) {
+                // Get the children name
+                ConfigurationSection matSection = materialSection.getConfigurationSection(matName);
+
+                // Check if the attributes of the Children exist
+                if (JLib.isValidMaterial(matSection)) {
+                    handleMaterialClick(player, clickedItem, matSection);
+                }
+            }
+        }
+    }
+
+    private void handleMaterialClick(Player player, ItemStack clickedItem, ConfigurationSection matSection) {
+        List<String> itemLore = plugin.getMaterialMenuFile().getStringList("materials-lore");
+        // Check if the clicked item is the selected material
+        boolean isSelected = DataManager.getOrCreatePlayerData(player).getTrimMaterial() == JLib.convertToTrimMaterial(clickedItem.getType());
+
+        for (int i = 0; i < itemLore.size(); i++) {
+            String loreLine = itemLore.get(i);
+
+            if (loreLine.contains("%PERMISSION%")) {
+                boolean hasPerm = player.hasPermission(matSection.getString("permission"));
+                loreLine = loreLine.replace("%PERMISSION%", hasPerm ? plugin.getMaterialMenuFile().getString("material-unlocked") : plugin.getMaterialMenuFile().getString("material-locked"));
+                itemLore.set(i, loreLine);
+            }
+        }
+
+        ItemStack matItem = JLib.buildMaterialItem(matSection, itemLore, isSelected);
+
+        if (clickedItem.equals(matItem)) {
+            if (player.hasPermission(matSection.getString("permission"))) {
+                DataManager.getOrCreatePlayerData(player).setTrimMaterial(clickedItem.getType());
+                JLib.playSound(player, plugin.getMaterialMenuFile().getString("material-unlocked-sound"));
+            } else {
+                player.sendMessage(JLib.format(plugin.getMessagesFile().getString("no-permission-material")));
+                JLib.playSound(player, plugin.getMaterialMenuFile().getString("material-locked-sound"));
             }
         }
     }

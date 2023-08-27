@@ -21,6 +21,7 @@ public class PatternMenu {
         Inventory inv = Bukkit.createInventory(player, plugin.getPatternMenuFile().getInt("menu-size"), JLib.format(plugin.getPatternMenuFile().getString("menu-title")));
 
         ConfigurationSection layoutSection = plugin.getPatternMenuFile().getConfigurationSection("Layout");
+
         JLib.setupInventoryLayout(layoutSection, inv);
 
         ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");

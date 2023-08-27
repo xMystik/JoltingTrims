@@ -1,5 +1,6 @@
 package me.skript.joltingtrims.Data.CacheData;
 
+import me.skript.joltingtrims.Utilities.JLib;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -86,56 +87,7 @@ public class PlayerData {
     }
 
     public void setTrimPattern(Material material) {
-        switch (material) {
-            case SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.SENTRY;
-                break;
-            case VEX_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.VEX;
-                break;
-            case WILD_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.WILD;
-                break;
-            case COAST_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.COAST;
-                break;
-            case DUNE_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.DUNE;
-                break;
-            case WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.WAYFINDER;
-                break;
-            case RAISER_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.RAISER;
-                break;
-            case SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.SHAPER;
-                break;
-            case HOST_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.HOST;
-                break;
-            case WARD_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.WARD;
-                break;
-            case SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.SILENCE;
-                break;
-            case TIDE_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.TIDE;
-                break;
-            case SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.SNOUT;
-                break;
-            case RIB_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.RIB;
-                break;
-            case EYE_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.EYE;
-                break;
-            case SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE:
-                this.pattern = TrimPattern.SPIRE;
-                break;
-        }
+        this.pattern = JLib.convertToTrimPattern(material);
     }
 
     public ItemStack getEditingItem() {

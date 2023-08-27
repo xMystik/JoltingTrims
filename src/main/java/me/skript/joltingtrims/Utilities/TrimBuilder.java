@@ -3,8 +3,8 @@ package me.skript.joltingtrims.Utilities;
 import me.skript.joltingtrims.Data.CacheData.DataManager;
 import me.skript.joltingtrims.Data.CacheData.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.Enums.ToastType;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -17,6 +17,7 @@ public class TrimBuilder {
         // Get the editing item
         ItemStack tempItem = DataManager.getOrCreatePlayerData(playerData.getPlayer()).getEditingItem().clone();
         ArmorTrim tempTrim;
+        Player player = playerData.getPlayer();
 
         Sound applyChangesSuccess = Sound.valueOf(plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
         Sound applyChangesFailure = Sound.valueOf(plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
@@ -35,44 +36,27 @@ public class TrimBuilder {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), tempArmorMeta.getTrim().getPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
-                        if(plugin.getConfigurationFile().getBoolean("toast-enabled")) {
-                            Toast.showTo(playerData.getPlayer(), "smithing_table", "Successfully finished|the trimming process!", ToastType.GOAL);
-                        }
-
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesSuccess,1.0f, 1.0f);
-                        }
+                        JLib.showToast(player);
+                        JLib.playSound(player, applyChangesSuccess);
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
                         tempTrim = new ArmorTrim(tempArmorMeta.getTrim().getMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
-                        if(plugin.getConfigurationFile().getBoolean("toast-enabled")) {
-                            Toast.showTo(playerData.getPlayer(), "smithing_table", "Successfully finished|the trimming process!", ToastType.GOAL);
-                        }
-
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesSuccess,1.0f, 1.0f);
-                        }
+                        JLib.showToast(player);
+                        JLib.playSound(player, applyChangesSuccess);
                     }
                     else if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() != null) {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
-                        if(plugin.getConfigurationFile().getBoolean("toast-enabled")) {
-                            Toast.showTo(playerData.getPlayer(), "smithing_table", "Successfully finished|the trimming process!", ToastType.GOAL);
-                        }
-
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesSuccess,1.0f, 1.0f);
-                        }
+                        JLib.showToast(player);
+                        JLib.playSound(player, applyChangesSuccess);
                     }
                     else {
                         playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-or-pat")));
 
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                        }
+                        JLib.playSound(player, applyChangesFailure);
                     }
                     tempItem.setItemMeta(tempArmorMeta);
                 }
@@ -80,79 +64,57 @@ public class TrimBuilder {
                     if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() == null) {
                         playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-pattern")));
 
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                        }
+                        JLib.playSound(player, applyChangesFailure);
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
                         playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-material")));
 
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                        }
+                        JLib.playSound(player, applyChangesFailure);
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() == null) {
                         playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
 
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                        }
+                        JLib.playSound(player, applyChangesFailure);
                     }
                     else {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
                         tempItem.setItemMeta(tempArmorMeta);
 
-                        if(plugin.getConfigurationFile().getBoolean("toast-enabled")) {
-                            Toast.showTo(playerData.getPlayer(), "smithing_table", "Successfully finished|the trimming process!", ToastType.GOAL);
-                        }
-
-                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                            playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesSuccess,1.0f, 1.0f);
-                        }
+                        JLib.showToast(player);
+                        JLib.playSound(player, applyChangesSuccess);
                     }
                 }
             }
             else {
                 if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() == null) {
-                    playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-pattern")));
+                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("select-pattern")));
 
-                    if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                        playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                    }
+                    JLib.playSound(player, applyChangesFailure);
                 }
                 else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
-                    playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-material")));
+                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("select-material")));
 
-                    if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                        playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                    }
+                    JLib.playSound(player, applyChangesFailure);
                 }
                 else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() == null) {
-                    playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
+                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
 
-                    if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                        playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesFailure,1.0f, 1.0f);
-                    }
+                    JLib.playSound(player, applyChangesFailure);
                 }
                 else {
                     tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                     tempArmorMeta.setTrim(tempTrim);
                     tempItem.setItemMeta(tempArmorMeta);
 
-                    if(plugin.getConfigurationFile().getBoolean("toast-enabled")) {
-                        Toast.showTo(playerData.getPlayer(), "smithing_table", "Successfully finished|the trimming process!", ToastType.GOAL);
-                    }
-
-                    if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
-                        playerData.getPlayer().playSound(playerData.getPlayer(), applyChangesSuccess,1.0f, 1.0f);
-                    }
+                    JLib.showToast(player);
+                    JLib.playSound(player, applyChangesSuccess);
                 }
             }
         }
 
-        DataManager.clearPlayerData(playerData.getPlayer());
-        playerData.getPlayer().closeInventory();
+        DataManager.clearPlayerData(player);
+        player.closeInventory();
         return tempItem;
     }
 

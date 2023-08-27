@@ -22,6 +22,7 @@ public class MaterialMenu {
         Inventory inv = Bukkit.createInventory(player, plugin.getMaterialMenuFile().getInt("menu-size"), JLib.format(plugin.getMaterialMenuFile().getString("menu-title")));
 
         ConfigurationSection layoutSection = plugin.getMaterialMenuFile().getConfigurationSection("Layout");
+
         JLib.setupInventoryLayout(layoutSection, inv);
 
         ConfigurationSection materialSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
