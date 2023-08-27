@@ -23,9 +23,10 @@ pattern-unlocked: '&a&lYes'
 # Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 pattern-locked-sound: BLOCK_ANVIL_LAND
 pattern-unlocked-sound: ENTITY_EXPERIENCE_ORB_PICKUP
-
 # Sound that will be played when player clicks on any button item
 button-click-sound: ITEM_BOOK_PAGE_TURN
+# Sound that will be played when player clicks on the clear pattern item
+clear-pattern-sound: ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM
 
 # Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
 # Available Types: FILLER, CLEAR_PATTERN, GENERAL_MENU_OPENER

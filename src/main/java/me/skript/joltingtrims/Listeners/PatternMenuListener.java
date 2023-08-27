@@ -82,7 +82,11 @@ public class PatternMenuListener implements Listener {
                                     }
                                     else if(type.equals(ItemType.CLEAR_PATTERN.getString())) {
                                         TrimBuilder.resetPattern(DataManager.getOrCreatePlayerData(player));
-                                        //TODO - ADD SOUND
+
+                                        if(plugin.getConfigurationFile().getBoolean("sounds-enabled")) {
+                                            Sound clearPatternSound = Sound.valueOf(plugin.getPatternMenuFile().getString("clear-pattern-sound"));
+                                            player.playSound(player, clearPatternSound, 1.0f, 1.0f);
+                                        }
                                     }
                                 }
                             }
