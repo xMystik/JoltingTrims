@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 
 public class TrimBuilder {
 
@@ -128,6 +129,7 @@ public class TrimBuilder {
                 tempArmorMeta.setTrim(null);
                 tempItem.setItemMeta(tempArmorMeta);
 
+                playerData.setTrimPattern((TrimPattern) null);
                 playerData.setEditingItem(tempItem);
             }
         }

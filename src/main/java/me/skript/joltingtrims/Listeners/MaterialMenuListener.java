@@ -218,6 +218,10 @@ public class MaterialMenuListener implements Listener {
             if (player.hasPermission(matSection.getString("permission"))) {
                 DataManager.getOrCreatePlayerData(player).setTrimMaterial(clickedItem.getType());
                 JLib.playSound(player, plugin.getMaterialMenuFile().getString("material-unlocked-sound"));
+
+                // Update the clicked item in the Material Menu GUI with the new glowing item
+                //player.getOpenInventory().setItem(event.getRawSlot(), matItem);
+
             } else {
                 player.sendMessage(JLib.format(plugin.getMessagesFile().getString("no-permission-material")));
                 JLib.playSound(player, plugin.getMaterialMenuFile().getString("material-locked-sound"));
