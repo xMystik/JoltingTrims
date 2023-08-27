@@ -3,7 +3,7 @@ version: '${project.version}'
 main: me.skript.joltingtrims.JoltingTrims
 api-version: 1.20
 authors: [ Skript ]
-description: A stylish way to manage your armor trims!
+description: Your stylish way of selecting a new cool trim for your armor!
 commands:
   trim:
     description: Main command of the armor trimming settings!
