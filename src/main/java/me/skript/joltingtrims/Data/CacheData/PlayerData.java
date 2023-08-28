@@ -11,8 +11,9 @@ public class PlayerData {
 
     private Player player;
     private TrimMaterial material;
-    private TrimMaterial previousMaterial;
     private TrimPattern pattern;
+    private TrimMaterial previousMaterial;
+    private TrimPattern previousPattern;
     private ItemStack editingItem;
 
     public PlayerData(Player player, ItemStack editingItem, TrimMaterial material, TrimPattern pattern) {
@@ -40,6 +41,22 @@ public class PlayerData {
         return material;
     }
 
+    public TrimPattern getTrimPattern() {
+        return pattern;
+    }
+
+    public TrimMaterial getPreviousTrimMaterial() {
+        return previousMaterial;
+    }
+
+    public TrimPattern getPreviousTrimPattern() {
+        return previousPattern;
+    }
+
+    public ItemStack getEditingItem() {
+        return editingItem;
+    }
+
     public void setTrimMaterial(Material material) {
         this.previousMaterial = this.material;
         this.material = JLib.convertToTrimMaterial(material);
@@ -47,18 +64,6 @@ public class PlayerData {
 
     public void setTrimMaterial(TrimMaterial material) {
         this.material = material;
-    }
-
-    public TrimMaterial getPreviousTrimMaterial() {
-        return previousMaterial;
-    }
-
-    public void setPreviousTrimMaterial(TrimMaterial trimMaterial) {
-        this.previousMaterial = trimMaterial;
-    }
-
-    public TrimPattern getTrimPattern() {
-        return pattern;
     }
 
     public void setTrimPattern(TrimPattern pattern) {
@@ -69,8 +74,12 @@ public class PlayerData {
         this.pattern = JLib.convertToTrimPattern(material);
     }
 
-    public ItemStack getEditingItem() {
-        return editingItem;
+    public void setPreviousTrimMaterial(TrimMaterial trimMaterial) {
+        this.previousMaterial = trimMaterial;
+    }
+
+    public void setPreviousTrimPattern(TrimPattern trimPattern) {
+        this.previousPattern = trimPattern;
     }
 
     public void setEditingItem(ItemStack editingItem) {

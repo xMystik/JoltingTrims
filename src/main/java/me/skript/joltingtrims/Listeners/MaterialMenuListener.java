@@ -4,10 +4,8 @@ import me.skript.joltingtrims.Data.CacheData.DataManager;
 import me.skript.joltingtrims.Data.CacheData.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Menus.GeneralMenu;
-import me.skript.joltingtrims.Menus.MaterialMenu;
 import me.skript.joltingtrims.Utilities.*;
 import me.skript.joltingtrims.Utilities.Enums.ItemType;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -15,9 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -85,7 +81,7 @@ public class MaterialMenuListener implements Listener {
     private void handleMaterialItemClick(Player player, ItemStack clickedItem, InventoryClickEvent event) {
         ConfigurationSection materialSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
 
-        // Check if the materials section exists
+        // Check if the Materials section exists
         if (materialSection != null) {
             // Get each child of the Materials section
             for (String matName : materialSection.getKeys(false)) {
