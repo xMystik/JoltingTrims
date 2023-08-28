@@ -1,16 +1,19 @@
 package me.skript.joltingtrims.Menus;
 
+import me.skript.joltingtrims.Data.CacheData.DataManager;
+import me.skript.joltingtrims.Data.CacheData.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Utilities.JItem;
 import me.skript.joltingtrims.Utilities.JLib;
-import me.skript.joltingtrims.Data.CacheData.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
 
 import java.util.List;
 
@@ -28,6 +31,10 @@ public class MaterialMenu {
         ConfigurationSection materialSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
 
         if (materialSection != null) {
+
+            PlayerData playerData = DataManager.getOrCreatePlayerData(player);
+            TrimMaterial selectedTrimMaterial = playerData.getTrimMaterial();
+
             for (String matName : materialSection.getKeys(false)) {
                 ConfigurationSection matSection = materialSection.getConfigurationSection(matName);
                 if (matSection != null) {
@@ -53,6 +60,11 @@ public class MaterialMenu {
                                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                                 .build();
 
+                        // Check if this item's material matches the selected TrimMaterial
+                        if (selectedTrimMaterial != null && JLib.convertToTrimMaterial(Material.getMaterial(matName)) == selectedTrimMaterial) {
+                            // Add the glowing enchantment
+                            matItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                        }
 
                         // Adds the material item to the GUI
                         inv.addItem(matItem);

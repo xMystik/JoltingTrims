@@ -11,6 +11,7 @@ public class PlayerData {
 
     private Player player;
     private TrimMaterial material;
+    private TrimMaterial previousMaterial;
     private TrimPattern pattern;
     private ItemStack editingItem;
 
@@ -40,42 +41,20 @@ public class PlayerData {
     }
 
     public void setTrimMaterial(Material material) {
-        switch (material) {
-            case AMETHYST_SHARD:
-                this.material = TrimMaterial.AMETHYST;
-                break;
-            case COPPER_INGOT:
-                this.material = TrimMaterial.COPPER;
-                break;
-            case DIAMOND:
-                this.material = TrimMaterial.DIAMOND;
-                break;
-            case GOLD_INGOT:
-                this.material = TrimMaterial.GOLD;
-                break;
-            case EMERALD:
-                this.material = TrimMaterial.EMERALD;
-                break;
-            case IRON_INGOT:
-                this.material = TrimMaterial.IRON;
-                break;
-            case LAPIS_LAZULI:
-                this.material = TrimMaterial.LAPIS;
-                break;
-            case NETHERITE_INGOT:
-                this.material = TrimMaterial.NETHERITE;
-                break;
-            case QUARTZ:
-                this.material = TrimMaterial.QUARTZ;
-                break;
-            case REDSTONE:
-                this.material = TrimMaterial.REDSTONE;
-                break;
-        }
+        this.previousMaterial = this.material;
+        this.material = JLib.convertToTrimMaterial(material);
     }
 
     public void setTrimMaterial(TrimMaterial material) {
         this.material = material;
+    }
+
+    public TrimMaterial getPreviousTrimMaterial() {
+        return previousMaterial;
+    }
+
+    public void setPreviousTrimMaterial(TrimMaterial trimMaterial) {
+        this.previousMaterial = trimMaterial;
     }
 
     public TrimPattern getTrimPattern() {

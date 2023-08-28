@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -46,7 +45,7 @@ public class JLib {
 
 
     //------------------------------------------------------------------------------------\\
-    public static ItemStack buildMaterialItem(ConfigurationSection matSection, List<String> itemLore, boolean isSelected) {
+    public static ItemStack buildMaterialItem(ConfigurationSection matSection, List<String> itemLore) {
         ItemStack matItem = new JItem.ItemBuilder(Material.getMaterial(matSection.getName()))
                 .setAmount(1)
                 .setDisplayName(JoltingTrims.getInstance().getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JLib.getDisplayNameOfMaterial(Material.getMaterial(matSection.getName()))))
@@ -54,24 +53,16 @@ public class JLib {
                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                 .build();
 
-        if (isSelected) {
-            matItem.addUnsafeEnchantment(Enchantment.LUCK, 1);
-        }
-
         return matItem;
     }
 
-    public static ItemStack buildPatternItem(ConfigurationSection patSection, List<String> itemLore, boolean isSelected) {
+    public static ItemStack buildPatternItem(ConfigurationSection patSection, List<String> itemLore) {
         ItemStack patItem = new JItem.ItemBuilder(Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
                 .setAmount(1)
                 .setDisplayName(JoltingTrims.getInstance().getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JLib.capitalizeWords(patSection.getName())))
                 .setLore(itemLore)
                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                 .build();
-
-        if (isSelected) {
-            patItem.addUnsafeEnchantment(Enchantment.LUCK, 1);
-        }
 
         return patItem;
     }
@@ -318,5 +309,11 @@ public class JLib {
         }
     }
     //------------------------------------------------------------------------------------\\
+
+    public static void removeEnchantmentGlow(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.removeEnchant(Enchantment.PROTECTION_ENVIRONMENTAL); // Change the enchantment type if needed
+        item.setItemMeta(itemMeta);
+    }
 
 }
