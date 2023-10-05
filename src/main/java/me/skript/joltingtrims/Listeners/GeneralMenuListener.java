@@ -135,7 +135,7 @@ public class GeneralMenuListener implements Listener {
             }
 
             PlayerData playerData = DataManager.getOrCreatePlayerData(player);
-            player.getInventory().addItem(TrimBuilder.setupItem(playerData));
+            player.getInventory().addItem(JTrimBuilder.setupItem(playerData));
         }
     }
 

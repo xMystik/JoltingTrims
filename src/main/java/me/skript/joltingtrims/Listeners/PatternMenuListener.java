@@ -6,7 +6,7 @@ import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Menus.GeneralMenu;
 import me.skript.joltingtrims.Utilities.Enums.ItemType;
 import me.skript.joltingtrims.Utilities.JUtil;
-import me.skript.joltingtrims.Utilities.TrimBuilder;
+import me.skript.joltingtrims.Utilities.JTrimBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -74,7 +74,7 @@ public class PatternMenuListener implements Listener {
                             JUtil.playSound(player, plugin.getPatternMenuFile().getString("button-click-sound"));
                         }
                         else if(type.equals(ItemType.CLEAR_PATTERN.getString())) {
-                            TrimBuilder.resetPattern(DataManager.getOrCreatePlayerData(player));
+                            JTrimBuilder.resetPattern(DataManager.getOrCreatePlayerData(player));
                             JUtil.playSound(player, plugin.getPatternMenuFile().getString("clear-pattern-sound"));
                         }
                     }

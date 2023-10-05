@@ -3,6 +3,7 @@ package me.skript.joltingtrims.Data.CacheData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Utilities.JUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 
@@ -61,6 +62,42 @@ public class DataManager {
         else {
             return false;
         }
+    }
+
+    public static int getUnlockedTrimMaterials(Player player) {
+        int counter = 0;
+
+        ConfigurationSection materialsSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
+
+        if (materialsSection != null) {
+            for (String materialKey : materialsSection.getKeys(false)) {
+                ConfigurationSection materialSettings = materialsSection.getConfigurationSection(materialKey);
+
+                if (materialSettings != null && materialSettings.getBoolean("enabled") && player.hasPermission(materialSettings.getString("permission"))) {
+                    counter++;
+                }
+            }
+        }
+
+        return counter;
+    }
+
+    public static int getUnlockedTrimPatterns(Player player) {
+        int counter = 0;
+
+        ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
+
+        if (patternsSection != null) {
+            for (String patternKey : patternsSection.getKeys(false)) {
+                ConfigurationSection patternSettings = patternsSection.getConfigurationSection(patternKey);
+
+                if (patternSettings != null && patternSettings.getBoolean("enabled") && player.hasPermission(patternSettings.getString("permission"))) {
+                    counter++;
+                }
+            }
+        }
+
+        return counter;
     }
 
 }

@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 
-public class TrimBuilder {
+public class JTrimBuilder {
 
     private static JoltingTrims plugin = JoltingTrims.getInstance();
 

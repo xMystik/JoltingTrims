@@ -21,6 +21,10 @@ apply-changes-failure-sound: BLOCK_DISPENSER_FAIL
 
 # Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
 # Available Types: FILLER, MATERIAL_MENU_OPENER, PATTERN_MENU_OPENER, FINALIZE_CHANGES
+#
+# Useful Lore Placeholders only for MATERIAL_MENU_OPENER and PATTERN_MENU_OPENER
+# %UNLOCKED% - Shows the amount of unlocked materials
+# %SELECTED% - Shows the currently selected material
 Layout:
   Filler-Item-1:
     type: FILLER
@@ -77,6 +81,9 @@ Layout:
     name: '&e&lMaterial Menu'
     lore:
       - '&7Click here to select a material!'
+      - '&7'
+      - '&e%UNLOCKED% &7Materials'
+      - '&e%SELECTED% &7Selected'
     slots:
       - 20
   Pattern-Menu-Item:
@@ -86,6 +93,9 @@ Layout:
     name: '&e&lPattern Menu'
     lore:
       - '&7Click here to select a pattern!'
+      - '&7'
+      - '&e%UNLOCKED% &7Patterns'
+      - '&e%SELECTED% &7Selected'
     slots:
       - 24
   Finalize-Menu-Item:

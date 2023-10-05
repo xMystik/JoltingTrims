@@ -17,7 +17,9 @@ public class GeneralMenu {
 
         ConfigurationSection layoutSection = plugin.getGeneralMenuFile().getConfigurationSection("Layout");
 
-        JUtil.setupInventoryLayout(layoutSection, inv);
+        JUtil.setupInventoryLayout(layoutSection, inv, player);
+
+
 
         DataManager.getOrCreatePlayerData(player);
         player.openInventory(inv);

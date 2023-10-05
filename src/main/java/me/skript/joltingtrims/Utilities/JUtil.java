@@ -1,6 +1,9 @@
 package me.skript.joltingtrims.Utilities;
 
+import me.skript.joltingtrims.Data.CacheData.DataManager;
+import me.skript.joltingtrims.Data.CacheData.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
+import me.skript.joltingtrims.Utilities.Enums.ItemType;
 import me.skript.joltingtrims.Utilities.Enums.ToastType;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
@@ -67,6 +70,49 @@ public class JUtil {
         return patItem;
     }
 
+    public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection, Player player) {
+        String type = itemSection.getString("type");
+        PlayerData playerData = DataManager.getOrCreatePlayerData(player);
+        List<String> itemLore = itemSection.getStringList("lore");
+
+        if(type.equals(ItemType.MATERIAL_MENU_OPENER.getString())) {
+            for (int i = 0; i < itemLore.size(); i++) {
+                String line = itemLore.get(i);
+
+                if (line.contains("%UNLOCKED%")) {
+                    line = line.replace("%UNLOCKED%", String.valueOf(DataManager.getUnlockedTrimMaterials(player)));
+                    itemLore.set(i, line);
+                }
+                if (line.contains("%SELECTED%")) {
+                    line = playerData.getTrimMaterial() != null ? line.replace("%SELECTED%", "TEST") : line.replace("%SELECTED%", "None");
+                    itemLore.set(i, line);
+                }
+            }
+        }
+        else if(type.equals(ItemType.PATTERN_MENU_OPENER.getString())) {
+            for (int i = 0; i < itemLore.size(); i++) {
+                String line = itemLore.get(i);
+
+                if (line.contains("%UNLOCKED%")) {
+                    line = line.replace("%UNLOCKED%", String.valueOf(DataManager.getUnlockedTrimPatterns(player)));
+                    itemLore.set(i, line);
+                }
+                if (line.contains("%SELECTED%")) {
+                    line = playerData.getTrimPattern() != null ? line.replace("%SELECTED%", "TEST") : line.replace("%SELECTED%", "None");
+                    itemLore.set(i, line);
+                }
+            }
+        }
+
+        return new JItemBuilder(Material.getMaterial(itemSection.getString("material")))
+                .setAmount(1)
+                .setDisplayName(itemSection.getString("name"))
+                .setLore(itemLore)
+                .setCustomModelData(itemSection.getInt("model"))
+                .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
+                .build();
+    }
+
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection) {
         return new JItemBuilder(Material.getMaterial(itemSection.getString("material")))
                 .setAmount(1)
@@ -89,6 +135,29 @@ public class JUtil {
                     if (materialName != null && !materialName.equals("none")) {
                         if (slots != null && !slots.isEmpty()) {
                             ItemStack guiItem = buildItemFromConfigSection(itemSection);
+
+                            for (int slot : slots) {
+                                inventory.setItem(slot, guiItem);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void setupInventoryLayout(ConfigurationSection layoutSection, Inventory inventory, Player player) {
+        if (layoutSection != null) {
+            for (String itemName : layoutSection.getKeys(false)) {
+                ConfigurationSection itemSection = layoutSection.getConfigurationSection(itemName);
+
+                if (itemSection != null) {
+                    String materialName = itemSection.getString("material");
+                    List<Integer> slots = itemSection.getIntegerList("slots");
+
+                    if (materialName != null && !materialName.equals("none")) {
+                        if (slots != null && !slots.isEmpty()) {
+                            ItemStack guiItem = buildItemFromConfigSection(itemSection, player);
 
                             for (int slot : slots) {
                                 inventory.setItem(slot, guiItem);
