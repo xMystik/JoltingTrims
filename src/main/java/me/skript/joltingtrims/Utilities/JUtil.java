@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,46 +72,10 @@ public class JUtil {
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection, Player player) {
-        String type = itemSection.getString("type");
         PlayerData playerData = DataManager.getOrCreatePlayerData(player);
         List<String> itemLore = itemSection.getStringList("lore");
 
-        if(type.equals(ItemType.MATERIAL_MENU_OPENER.getString())) {
-            for (int i = 0; i < itemLore.size(); i++) {
-                String line = itemLore.get(i);
-
-                if(line.contains("%UNLOCKED%")) {
-                    line = line.replace("%UNLOCKED%", String.valueOf(DataManager.getUnlockedTrimMaterials(player)));
-                    itemLore.set(i, line);
-                }
-                if(line.contains("%SELECTED%")) {
-                    line = playerData.getTrimMaterial() != null ? line.replace("%SELECTED%", capitalizeWords(playerData.getTrimMaterial().getKey().getKey())) : line.replace("%SELECTED%", "None");
-                    itemLore.set(i, line);
-                }
-                if(line.contains("%MAX%")) {
-                    line = line.replace("%MAX%", String.valueOf(DataManager.getMaxTrimMaterials()));
-                    itemLore.set(i, line);
-                }
-            }
-        }
-        else if(type.equals(ItemType.PATTERN_MENU_OPENER.getString())) {
-            for (int i = 0; i < itemLore.size(); i++) {
-                String line = itemLore.get(i);
-
-                if(line.contains("%UNLOCKED%")) {
-                    line = line.replace("%UNLOCKED%", String.valueOf(DataManager.getUnlockedTrimPatterns(player)));
-                    itemLore.set(i, line);
-                }
-                if(line.contains("%SELECTED%")) {
-                    line = playerData.getTrimPattern() != null ? line.replace("%SELECTED%", capitalizeWords(playerData.getTrimPattern().getKey().getKey())) : line.replace("%SELECTED%", "None");
-                    itemLore.set(i, line);
-                }
-                if(line.contains("%MAX%")) {
-                    line = line.replace("%MAX%", String.valueOf(DataManager.getMaxTrimPatterns()));
-                    itemLore.set(i, line);
-                }
-            }
-        }
+        itemLore = replacePlaceholders(itemLore, playerData);
 
         return new JItemBuilder(Material.getMaterial(itemSection.getString("material")))
                 .setAmount(1)
@@ -119,6 +84,34 @@ public class JUtil {
                 .setCustomModelData(itemSection.getInt("model"))
                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                 .build();
+    }
+
+    public static List<String> replacePlaceholders(List<String> itemLore, PlayerData playerData) {
+        List<String> modifiedLore = new ArrayList<>();
+
+        for (String line : itemLore) {
+            if(line.contains("%UNLOCKED_MATERIALS%")) {
+                line = line.replace("%UNLOCKED_MATERIALS%", String.valueOf(DataManager.getUnlockedTrimMaterials(playerData.getPlayer())));
+            }
+            if(line.contains("%UNLOCKED_PATTERNS%")) {
+                line = line.replace("%UNLOCKED_PATTERNS%", String.valueOf(DataManager.getUnlockedTrimPatterns(playerData.getPlayer())));
+            }
+            if(line.contains("%SELECTED_MATERIAL%")) {
+                line = line.replace("%SELECTED_MATERIAL%", playerData.getTrimMaterial() != null ? capitalizeWords(playerData.getTrimMaterial().getKey().getKey()) : "None");
+            }
+            if(line.contains("%SELECTED_PATTERN%")) {
+                line = line.replace("%SELECTED_PATTERN%", playerData.getTrimPattern() != null ? capitalizeWords(playerData.getTrimPattern().getKey().getKey()) : "None");
+            }
+            if(line.contains("%MAX_MATERIALS%")) {
+                line = line.replace("%MAX_MATERIALS%", String.valueOf(DataManager.getMaxTrimMaterials()));
+            }
+            if(line.contains("%MAX_PATTERNS%")) {
+                line = line.replace("%MAX_PATTERNS%", String.valueOf(DataManager.getMaxTrimPatterns()));
+            }
+            modifiedLore.add(line);
+        }
+
+        return modifiedLore;
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection) {

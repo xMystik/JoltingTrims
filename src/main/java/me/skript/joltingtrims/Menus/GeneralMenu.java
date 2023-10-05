@@ -19,8 +19,6 @@ public class GeneralMenu {
 
         JUtil.setupInventoryLayout(layoutSection, inv, player);
 
-
-
         DataManager.getOrCreatePlayerData(player);
         player.openInventory(inv);
     }
