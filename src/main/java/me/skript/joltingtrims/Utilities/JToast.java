@@ -8,23 +8,23 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class Toast {
+public class JToast {
 
     private final NamespacedKey key;
     private final String icon;
     private final String message;
     private final ToastType type;
-    private JoltingTrims plugin = JoltingTrims.getInstance();
+    private final JoltingTrims plugin = JoltingTrims.getInstance();
 
-    public static void showTo(Player player, String icon, String message, ToastType type) {
-        new Toast(icon, message, type).setup(player);
+    public static void showTo(Player player, ToastType type, String icon, String message) {
+        new JToast(type, icon, message).setup(player);
     }
 
-    private Toast(String icon, String message, ToastType type) {
+    private JToast(ToastType type, String icon, String message) {
         this.key = new NamespacedKey(plugin, UUID.randomUUID().toString());
+        this.type = type;
         this.icon = icon;
         this.message = message;
-        this.type = type;
     }
 
     private void setup(Player player) {
@@ -45,7 +45,7 @@ public class Toast {
                 "    },\n" +
                 "    \"display\": {\n" +
                 "        \"icon\": {\n" +
-                "            \"item\": \"minecraft:" + icon + "\"\n" +
+                "            \"item\": \"minecraft:" + icon.toLowerCase() + "\"\n" +
                 "        },\n" +
                 "        \"title\": {\n" +
                 "            \"text\": \"" + message.replace("|", "\n") + "\"\n" +

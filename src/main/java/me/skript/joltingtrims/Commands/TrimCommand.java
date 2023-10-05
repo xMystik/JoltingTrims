@@ -2,7 +2,7 @@ package me.skript.joltingtrims.Commands;
 
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Menus.GeneralMenu;
-import me.skript.joltingtrims.Utilities.JLib;
+import me.skript.joltingtrims.Utilities.JUtil;
 import me.skript.joltingtrims.Data.CacheData.DataManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +41,7 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                             new GeneralMenu().openMenu(player);
                         }
                         else {
-                            player.sendMessage(JLib.format(plugin.getMessagesFile().getString("no-permission-command")));
+                            player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
                         }
                         return true;
                     }
@@ -54,29 +54,29 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                             plugin.reloadMessagesFile();
                             plugin.reloadPatternMenuFile();
                             plugin.reloadMaterialMenuFile();
-                            player.sendMessage(JLib.format(plugin.getMessagesFile().getString("files-reload")));
+                            player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("files-reload")));
                         }
                         else {
-                            player.sendMessage(JLib.format(plugin.getMessagesFile().getString("no-permission-command")));
+                            player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
                         }
                         return true;
                     }
                     else if(args[0].equalsIgnoreCase("version")) {
-                        player.sendMessage(JLib.format("&3&l[JoltingTrims] &7Current plugin version: &e&l1.0.1"));
+                        player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version: &e&l1.0.1"));
                         return true;
                     }
                     else {
-                        player.sendMessage(JLib.format(plugin.getMessagesFile().getString("command-usage")));
+                        player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("command-usage")));
                         return true;
                     }
                 }
                 else {
-                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("command-usage")));
+                    player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("command-usage")));
                     return true;
                 }
             }
             else {
-                sender.sendMessage(JLib.format(plugin.getMessagesFile().getString("only-players")));
+                sender.sendMessage(JUtil.format(plugin.getMessagesFile().getString("only-players")));
                 return true;
             }
         }

@@ -35,7 +35,7 @@ public class MaterialMenuListener implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         if (!(event.getClickedInventory() != null && event.getCurrentItem() != null && event.getClickedInventory().getType() != InventoryType.CREATIVE
-                && event.getView().getTitle().equals(JLib.format(plugin.getMaterialMenuFile().getString("menu-title"))))) {
+                && event.getView().getTitle().equals(JUtil.format(plugin.getMaterialMenuFile().getString("menu-title"))))) {
             return;
         }
 
@@ -67,10 +67,10 @@ public class MaterialMenuListener implements Listener {
                     List<Integer> slots = itemSection.getIntegerList("slots");
 
                     // Check if it's a valid item section and the clicked item is a config item
-                    if (JLib.isValidItemSection(materialName, slots) && JLib.isConfigItem(clickedItem, itemSection)) {
+                    if (JUtil.isValidItemSection(materialName, slots) && JUtil.isConfigItem(clickedItem, itemSection)) {
                         if (type.equals(ItemType.GENERAL_MENU_OPENER.getString())) {
                             new GeneralMenu().openMenu(player);
-                            JLib.playSound(player, plugin.getMaterialMenuFile().getString("button-click-sound"));
+                            JUtil.playSound(player, plugin.getMaterialMenuFile().getString("button-click-sound"));
                         }
                     }
                 }
@@ -89,7 +89,7 @@ public class MaterialMenuListener implements Listener {
                 ConfigurationSection matSection = materialSection.getConfigurationSection(matName);
 
                 // Check if the attributes of the Children exist
-                if (JLib.isValidMaterial(matSection)) {
+                if (JUtil.isValidMaterial(matSection)) {
                     handleMaterialClick(player, clickedItem, matSection, event);
                 }
             }
@@ -110,7 +110,7 @@ public class MaterialMenuListener implements Listener {
             }
         }
 
-        ItemStack matItem = JLib.buildMaterialItem(matSection, itemLore);
+        ItemStack matItem = JUtil.buildMaterialItem(matSection, itemLore);
 
         if (clickedItem.equals(matItem)) {
             // If player has permission to use that Material
@@ -123,7 +123,7 @@ public class MaterialMenuListener implements Listener {
                     InventoryView inventoryView = player.getOpenInventory();
                     for (int slot = 0; slot < inventoryView.getTopInventory().getSize(); slot++) {
                         ItemStack itemInSlot = inventoryView.getTopInventory().getItem(slot);
-                        if (itemInSlot != null && JLib.convertToTrimMaterial(itemInSlot.getType()) == playerData.getPreviousTrimMaterial()) {
+                        if (itemInSlot != null && JUtil.convertToTrimMaterial(itemInSlot.getType()) == playerData.getPreviousTrimMaterial()) {
                             itemInSlot.removeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL);
                         }
                     }
@@ -131,7 +131,7 @@ public class MaterialMenuListener implements Listener {
 
                 // Set the new TrimMaterial as the material that the player clicked
                 playerData.setTrimMaterial(clickedItem.getType());
-                JLib.playSound(player, plugin.getMaterialMenuFile().getString("material-unlocked-sound"));
+                JUtil.playSound(player, plugin.getMaterialMenuFile().getString("material-unlocked-sound"));
 
                 // Add an enchantment to make the item glow
                 matItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -142,8 +142,8 @@ public class MaterialMenuListener implements Listener {
             }
             // If player does not have permission to use that Material
             else {
-                player.sendMessage(JLib.format(plugin.getMessagesFile().getString("no-permission-material")));
-                JLib.playSound(player, plugin.getMaterialMenuFile().getString("material-locked-sound"));
+                player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-material")));
+                JUtil.playSound(player, plugin.getMaterialMenuFile().getString("material-locked-sound"));
             }
         }
     }

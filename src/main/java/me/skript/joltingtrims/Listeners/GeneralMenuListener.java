@@ -38,7 +38,7 @@ public class GeneralMenuListener implements Listener {
             return;
         }
 
-        if (event.getClickedInventory().getType() != InventoryType.CREATIVE && event.getView().getTitle().equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
+        if (event.getClickedInventory().getType() != InventoryType.CREATIVE && event.getView().getTitle().equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
             Player player = (Player) event.getWhoClicked();
 
             event.setCancelled(true);
@@ -56,7 +56,7 @@ public class GeneralMenuListener implements Listener {
         Inventory topInventory = event.getView().getTopInventory();
         int guiSlot = plugin.getGeneralMenuFile().getInt("item-slot");
 
-        if (!JLib.isArmorPiece(clickedItem.getType())) {
+        if (!JUtil.isArmorPiece(clickedItem.getType())) {
             return;
         }
 
@@ -117,12 +117,12 @@ public class GeneralMenuListener implements Listener {
         if (itemType.equals(ItemType.MATERIAL_MENU_OPENER.getString())) {
 
             new MaterialMenu().openMenu(player);
-            JLib.playSound(player, buttonSound);
+            JUtil.playSound(player, buttonSound);
 
         } else if (itemType.equals(ItemType.PATTERN_MENU_OPENER.getString())) {
 
             new PatternMenu().openMenu(player);
-            JLib.playSound(player, buttonSound);
+            JUtil.playSound(player, buttonSound);
 
         } else if (itemType.equals(ItemType.FINALIZE_CHANGES.getString())) {
             // Gets the item on the specified item slot
@@ -130,7 +130,7 @@ public class GeneralMenuListener implements Listener {
 
             // Checks if an item exists on the specified slot. If it doesn't then throw an error message
             if (guiSlotItem == null) {
-                player.sendMessage(JLib.format(plugin.getMessagesFile().getString("insert-item")));
+                player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("insert-item")));
                 return;
             }
 
@@ -145,7 +145,7 @@ public class GeneralMenuListener implements Listener {
         String inventoryTitle = event.getView().getTitle();
         Player player = (Player) event.getPlayer();
 
-        if (inventoryTitle.equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
+        if (inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
             ItemStack savedEditItem = DataManager.getOrCreatePlayerData(player).getEditingItem();
             if (savedEditItem != null) {
                 inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), savedEditItem);
@@ -162,7 +162,7 @@ public class GeneralMenuListener implements Listener {
 
         // Check if InventoryClose was caused to open a new Inventory
         if(event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-            if(inventoryTitle.equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JLib.isArmorPiece(editItem.getType())) {
+            if(inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JUtil.isArmorPiece(editItem.getType())) {
                 DataManager.getOrCreatePlayerData(player).setEditingItem(editItem);
             }
         }
@@ -180,7 +180,7 @@ public class GeneralMenuListener implements Listener {
             DataManager.clearPlayerData(player);
         }
         else {
-            if(inventoryTitle.equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JLib.isArmorPiece(editItem.getType())) {
+            if(inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JUtil.isArmorPiece(editItem.getType())) {
                 DataManager.clearPlayerData(player);
                 inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), new ItemStack(Material.AIR));
                 player.getInventory().addItem(editItem);

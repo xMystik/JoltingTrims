@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JLib {
+public class JUtil {
 
     //------------------------------------------------------------------------------------\\
     public static String format(String text) {
@@ -46,9 +46,9 @@ public class JLib {
 
     //------------------------------------------------------------------------------------\\
     public static ItemStack buildMaterialItem(ConfigurationSection matSection, List<String> itemLore) {
-        ItemStack matItem = new JItem.ItemBuilder(Material.getMaterial(matSection.getName()))
+        ItemStack matItem = new JItemBuilder(Material.getMaterial(matSection.getName()))
                 .setAmount(1)
-                .setDisplayName(JoltingTrims.getInstance().getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JLib.getDisplayNameOfMaterial(Material.getMaterial(matSection.getName()))))
+                .setDisplayName(JoltingTrims.getInstance().getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matSection.getName()))))
                 .setLore(itemLore)
                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                 .build();
@@ -57,9 +57,9 @@ public class JLib {
     }
 
     public static ItemStack buildPatternItem(ConfigurationSection patSection, List<String> itemLore) {
-        ItemStack patItem = new JItem.ItemBuilder(Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
+        ItemStack patItem = new JItemBuilder(Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
                 .setAmount(1)
-                .setDisplayName(JoltingTrims.getInstance().getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JLib.capitalizeWords(patSection.getName())))
+                .setDisplayName(JoltingTrims.getInstance().getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JUtil.capitalizeWords(patSection.getName())))
                 .setLore(itemLore)
                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                 .build();
@@ -68,7 +68,7 @@ public class JLib {
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection) {
-        return new JItem.ItemBuilder(Material.getMaterial(itemSection.getString("material")))
+        return new JItemBuilder(Material.getMaterial(itemSection.getString("material")))
                 .setAmount(1)
                 .setDisplayName(itemSection.getString("name"))
                 .setLore(itemSection.getStringList("lore"))
@@ -101,7 +101,7 @@ public class JLib {
     }
 
     public static boolean isConfigItem(ItemStack item, ConfigurationSection itemSection) {
-        ItemStack configItem = JLib.buildItemFromConfigSection(itemSection);
+        ItemStack configItem = JUtil.buildItemFromConfigSection(itemSection);
         return item != null && item.equals(configItem);
     }
 
@@ -305,7 +305,7 @@ public class JLib {
 
     public static void showToast(Player player) {
         if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("toast-enabled")) {
-            Toast.showTo(player, "smithing_table", "Successfully finished|the trimming process!", ToastType.GOAL);
+            JToast.showTo(player, ToastType.GOAL, "smithing_table", "Successfully finished|the trimming process!");
         }
     }
     //------------------------------------------------------------------------------------\\

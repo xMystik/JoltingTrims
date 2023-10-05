@@ -8,8 +8,7 @@ import me.skript.joltingtrims.Listeners.SmithingTableListener;
 import me.skript.joltingtrims.Data.FileData.ConfigFile;
 import me.skript.joltingtrims.Data.FileData.FilesManager;
 import me.skript.joltingtrims.Data.CacheData.DataManager;
-import me.skript.joltingtrims.Utilities.JLib;
-import me.skript.joltingtrims.Utilities.TrimBuilder;
+import me.skript.joltingtrims.Utilities.JUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,7 +28,7 @@ public final class JoltingTrims extends JavaPlugin {
     public void onEnable() {
 
         if(!Bukkit.getServer().getVersion().contains(REQUIRED_VERSION)) {
-            Bukkit.getConsoleSender().sendMessage(JLib.format("&3&l[JoltingTrims] &7Server version is not supported."));
+            Bukkit.getConsoleSender().sendMessage(JUtil.format("&3&l[JoltingTrims] &7Server version is not supported."));
             Bukkit.getPluginManager().disablePlugin(this);
         }
         else {

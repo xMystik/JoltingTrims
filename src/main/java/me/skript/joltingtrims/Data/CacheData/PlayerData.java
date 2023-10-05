@@ -1,6 +1,6 @@
 package me.skript.joltingtrims.Data.CacheData;
 
-import me.skript.joltingtrims.Utilities.JLib;
+import me.skript.joltingtrims.Utilities.JUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,7 +59,7 @@ public class PlayerData {
 
     public void setTrimMaterial(Material material) {
         this.previousMaterial = this.material;
-        this.material = JLib.convertToTrimMaterial(material);
+        this.material = JUtil.convertToTrimMaterial(material);
     }
 
     public void setTrimMaterial(TrimMaterial material) {
@@ -71,7 +71,7 @@ public class PlayerData {
     }
 
     public void setTrimPattern(Material material) {
-        this.pattern = JLib.convertToTrimPattern(material);
+        this.pattern = JUtil.convertToTrimPattern(material);
     }
 
     public void setPreviousTrimMaterial(TrimMaterial trimMaterial) {

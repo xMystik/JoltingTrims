@@ -5,7 +5,7 @@ import me.skript.joltingtrims.Data.CacheData.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.Menus.GeneralMenu;
 import me.skript.joltingtrims.Utilities.Enums.ItemType;
-import me.skript.joltingtrims.Utilities.JLib;
+import me.skript.joltingtrims.Utilities.JUtil;
 import me.skript.joltingtrims.Utilities.TrimBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -36,7 +36,7 @@ public class PatternMenuListener implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         if(!(event.getClickedInventory() != null && clickedItem != null && event.getClickedInventory().getType() != InventoryType.CREATIVE
-                && event.getView().getTitle().equals(JLib.format(plugin.getPatternMenuFile().getString("menu-title"))))) {
+                && event.getView().getTitle().equals(JUtil.format(plugin.getPatternMenuFile().getString("menu-title"))))) {
             return;
         }
 
@@ -68,14 +68,14 @@ public class PatternMenuListener implements Listener {
                     List<Integer> slots = itemSection.getIntegerList("slots");
 
                     // Check if it's a valid item section and the clicked item is a config item
-                    if (JLib.isValidItemSection(materialName, slots) && JLib.isConfigItem(clickedItem, itemSection)) {
+                    if (JUtil.isValidItemSection(materialName, slots) && JUtil.isConfigItem(clickedItem, itemSection)) {
                         if(type.equals(ItemType.GENERAL_MENU_OPENER.getString())) {
                             new GeneralMenu().openMenu(player);
-                            JLib.playSound(player, plugin.getPatternMenuFile().getString("button-click-sound"));
+                            JUtil.playSound(player, plugin.getPatternMenuFile().getString("button-click-sound"));
                         }
                         else if(type.equals(ItemType.CLEAR_PATTERN.getString())) {
                             TrimBuilder.resetPattern(DataManager.getOrCreatePlayerData(player));
-                            JLib.playSound(player, plugin.getPatternMenuFile().getString("clear-pattern-sound"));
+                            JUtil.playSound(player, plugin.getPatternMenuFile().getString("clear-pattern-sound"));
                         }
                     }
                 }
@@ -94,7 +94,7 @@ public class PatternMenuListener implements Listener {
                 ConfigurationSection patSection = patternSection.getConfigurationSection(patName);
 
                 // Check if the attributes of the Children exist
-                if (JLib.isValidMaterial(patSection)) {
+                if (JUtil.isValidMaterial(patSection)) {
                     handlePatternClick(player, clickedItem, patSection, event);
                 }
             }
@@ -115,7 +115,7 @@ public class PatternMenuListener implements Listener {
             }
         }
 
-        ItemStack patItem = JLib.buildPatternItem(patSection, itemLore);
+        ItemStack patItem = JUtil.buildPatternItem(patSection, itemLore);
 
         if (clickedItem.equals(patItem)) {
             // If player has permission to use that Pattern
@@ -128,7 +128,7 @@ public class PatternMenuListener implements Listener {
                     InventoryView inventoryView = player.getOpenInventory();
                     for (int slot = 0; slot < inventoryView.getTopInventory().getSize(); slot++) {
                         ItemStack itemInSlot = inventoryView.getTopInventory().getItem(slot);
-                        if (itemInSlot != null && JLib.convertToTrimPattern(itemInSlot.getType()) == playerData.getPreviousTrimPattern()) {
+                        if (itemInSlot != null && JUtil.convertToTrimPattern(itemInSlot.getType()) == playerData.getPreviousTrimPattern()) {
                             itemInSlot.removeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL);
                         }
                     }
@@ -136,7 +136,7 @@ public class PatternMenuListener implements Listener {
 
                 // Set the new TrimPattern as the pattern that the player clicked
                 playerData.setTrimPattern(clickedItem.getType());
-                JLib.playSound(player, plugin.getPatternMenuFile().getString("pattern-unlocked-sound"));
+                JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-unlocked-sound"));
 
                 // Add an enchantment to make the item glow
                 patItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -147,8 +147,8 @@ public class PatternMenuListener implements Listener {
             }
             // If player does not have permission to use that Material
             else {
-                player.sendMessage(JLib.format(plugin.getMessagesFile().getString("no-permission-material")));
-                JLib.playSound(player, plugin.getPatternMenuFile().getString("pattern-locked-sound"));
+                player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-material")));
+                JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-locked-sound"));
             }
         }
     }

@@ -3,8 +3,8 @@ package me.skript.joltingtrims.Menus;
 import me.skript.joltingtrims.Data.CacheData.DataManager;
 import me.skript.joltingtrims.Data.CacheData.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.JItem;
-import me.skript.joltingtrims.Utilities.JLib;
+import me.skript.joltingtrims.Utilities.JItemBuilder;
+import me.skript.joltingtrims.Utilities.JUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -22,11 +22,11 @@ public class MaterialMenu {
     private JoltingTrims plugin = JoltingTrims.getInstance();
 
     public void openMenu(Player player) {
-        Inventory inv = Bukkit.createInventory(player, plugin.getMaterialMenuFile().getInt("menu-size"), JLib.format(plugin.getMaterialMenuFile().getString("menu-title")));
+        Inventory inv = Bukkit.createInventory(player, plugin.getMaterialMenuFile().getInt("menu-size"), JUtil.format(plugin.getMaterialMenuFile().getString("menu-title")));
 
         ConfigurationSection layoutSection = plugin.getMaterialMenuFile().getConfigurationSection("Layout");
 
-        JLib.setupInventoryLayout(layoutSection, inv);
+        JUtil.setupInventoryLayout(layoutSection, inv);
 
         ConfigurationSection materialSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
 
@@ -53,15 +53,15 @@ public class MaterialMenu {
                             }
                         }
 
-                        ItemStack matItem = new JItem.ItemBuilder(Material.getMaterial(matName))
+                        ItemStack matItem = new JItemBuilder(Material.getMaterial(matName))
                                 .setAmount(1)
-                                .setDisplayName(plugin.getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JLib.getDisplayNameOfMaterial(Material.getMaterial(matName))))
+                                .setDisplayName(plugin.getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matName))))
                                 .setLore(itemLore)
                                 .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                                 .build();
 
                         // Check if this item's material matches the selected TrimMaterial
-                        if (selectedTrimMaterial != null && JLib.convertToTrimMaterial(Material.getMaterial(matName)) == selectedTrimMaterial) {
+                        if (selectedTrimMaterial != null && JUtil.convertToTrimMaterial(Material.getMaterial(matName)) == selectedTrimMaterial) {
                             // Add the glowing enchantment
                             matItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
                         }

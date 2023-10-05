@@ -1,7 +1,7 @@
 package me.skript.joltingtrims.Data.CacheData;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.JLib;
+import me.skript.joltingtrims.Utilities.JUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
@@ -40,9 +40,9 @@ public class DataManager {
             InventoryView openInventory = onlinePlayer.getOpenInventory();
 
             // Check if the opened inventory is one of the plugin's menus
-            if (openInventory.getTitle().equals(JLib.format(plugin.getGeneralMenuFile().getString("menu-title"))) ||
-                    openInventory.getTitle().equals(JLib.format(plugin.getMaterialMenuFile().getString("menu-title"))) ||
-                    openInventory.getTitle().equals(JLib.format(plugin.getPatternMenuFile().getString("menu-title")))) {
+            if (openInventory.getTitle().equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) ||
+                    openInventory.getTitle().equals(JUtil.format(plugin.getMaterialMenuFile().getString("menu-title"))) ||
+                    openInventory.getTitle().equals(JUtil.format(plugin.getPatternMenuFile().getString("menu-title")))) {
 
                 // Close the opened inventory
                 onlinePlayer.closeInventory();

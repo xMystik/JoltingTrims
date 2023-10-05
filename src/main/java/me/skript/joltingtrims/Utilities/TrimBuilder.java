@@ -37,79 +37,79 @@ public class TrimBuilder {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), tempArmorMeta.getTrim().getPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
-                        JLib.showToast(player);
-                        JLib.playSound(player, applyChangesSuccess);
+                        JUtil.showToast(player);
+                        JUtil.playSound(player, applyChangesSuccess);
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
                         tempTrim = new ArmorTrim(tempArmorMeta.getTrim().getMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
-                        JLib.showToast(player);
-                        JLib.playSound(player, applyChangesSuccess);
+                        JUtil.showToast(player);
+                        JUtil.playSound(player, applyChangesSuccess);
                     }
                     else if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() != null) {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
-                        JLib.showToast(player);
-                        JLib.playSound(player, applyChangesSuccess);
+                        JUtil.showToast(player);
+                        JUtil.playSound(player, applyChangesSuccess);
                     }
                     else {
-                        playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-or-pat")));
+                        playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-mat-or-pat")));
 
-                        JLib.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, applyChangesFailure);
                     }
                     tempItem.setItemMeta(tempArmorMeta);
                 }
                 else {
                     if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() == null) {
-                        playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-pattern")));
+                        playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-pattern")));
 
-                        JLib.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, applyChangesFailure);
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
-                        playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-material")));
+                        playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-material")));
 
-                        JLib.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, applyChangesFailure);
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() == null) {
-                        playerData.getPlayer().sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
+                        playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
 
-                        JLib.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, applyChangesFailure);
                     }
                     else {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
                         tempItem.setItemMeta(tempArmorMeta);
 
-                        JLib.showToast(player);
-                        JLib.playSound(player, applyChangesSuccess);
+                        JUtil.showToast(player);
+                        JUtil.playSound(player, applyChangesSuccess);
                     }
                 }
             }
             else {
                 if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() == null) {
-                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("select-pattern")));
+                    player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-pattern")));
 
-                    JLib.playSound(player, applyChangesFailure);
+                    JUtil.playSound(player, applyChangesFailure);
                 }
                 else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
-                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("select-material")));
+                    player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-material")));
 
-                    JLib.playSound(player, applyChangesFailure);
+                    JUtil.playSound(player, applyChangesFailure);
                 }
                 else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() == null) {
-                    player.sendMessage(JLib.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
+                    player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
 
-                    JLib.playSound(player, applyChangesFailure);
+                    JUtil.playSound(player, applyChangesFailure);
                 }
                 else {
                     tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                     tempArmorMeta.setTrim(tempTrim);
                     tempItem.setItemMeta(tempArmorMeta);
 
-                    JLib.showToast(player);
-                    JLib.playSound(player, applyChangesSuccess);
+                    JUtil.showToast(player);
+                    JUtil.playSound(player, applyChangesSuccess);
                 }
             }
         }
