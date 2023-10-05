@@ -56,17 +56,11 @@ public class DataManager {
         return true;
     }
     public static boolean isReloading() {
-        if(reloadFlag) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return reloadFlag;
     }
 
     public static int getUnlockedTrimMaterials(Player player) {
         int counter = 0;
-
         ConfigurationSection materialsSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
 
         if (materialsSection != null) {
@@ -78,13 +72,11 @@ public class DataManager {
                 }
             }
         }
-
         return counter;
     }
 
     public static int getUnlockedTrimPatterns(Player player) {
         int counter = 0;
-
         ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
 
         if (patternsSection != null) {
@@ -96,8 +88,39 @@ public class DataManager {
                 }
             }
         }
-
         return counter;
+    }
+
+    public static int getMaxTrimPatterns() {
+        ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
+        int count = 0;
+
+        if (patternsSection != null) {
+            for (String patternKey : patternsSection.getKeys(false)) {
+                ConfigurationSection patternConfig = patternsSection.getConfigurationSection(patternKey);
+                if (patternConfig != null && patternConfig.getBoolean("enabled")) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static int getMaxTrimMaterials() {
+        ConfigurationSection materialsSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
+        int count = 0;
+
+        if (materialsSection != null) {
+            for (String materialKey : materialsSection.getKeys(false)) {
+                ConfigurationSection materialConfig = materialsSection.getConfigurationSection(materialKey);
+                if (materialConfig != null && materialConfig.getBoolean("enabled")) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
 }

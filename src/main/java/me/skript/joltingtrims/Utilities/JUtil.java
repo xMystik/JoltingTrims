@@ -79,12 +79,16 @@ public class JUtil {
             for (int i = 0; i < itemLore.size(); i++) {
                 String line = itemLore.get(i);
 
-                if (line.contains("%UNLOCKED%")) {
+                if(line.contains("%UNLOCKED%")) {
                     line = line.replace("%UNLOCKED%", String.valueOf(DataManager.getUnlockedTrimMaterials(player)));
                     itemLore.set(i, line);
                 }
-                if (line.contains("%SELECTED%")) {
-                    line = playerData.getTrimMaterial() != null ? line.replace("%SELECTED%", "TEST") : line.replace("%SELECTED%", "None");
+                if(line.contains("%SELECTED%")) {
+                    line = playerData.getTrimMaterial() != null ? line.replace("%SELECTED%", capitalizeWords(playerData.getTrimMaterial().getKey().getKey())) : line.replace("%SELECTED%", "None");
+                    itemLore.set(i, line);
+                }
+                if(line.contains("%MAX%")) {
+                    line = line.replace("%MAX%", String.valueOf(DataManager.getMaxTrimMaterials()));
                     itemLore.set(i, line);
                 }
             }
@@ -93,12 +97,16 @@ public class JUtil {
             for (int i = 0; i < itemLore.size(); i++) {
                 String line = itemLore.get(i);
 
-                if (line.contains("%UNLOCKED%")) {
+                if(line.contains("%UNLOCKED%")) {
                     line = line.replace("%UNLOCKED%", String.valueOf(DataManager.getUnlockedTrimPatterns(player)));
                     itemLore.set(i, line);
                 }
-                if (line.contains("%SELECTED%")) {
-                    line = playerData.getTrimPattern() != null ? line.replace("%SELECTED%", "TEST") : line.replace("%SELECTED%", "None");
+                if(line.contains("%SELECTED%")) {
+                    line = playerData.getTrimPattern() != null ? line.replace("%SELECTED%", capitalizeWords(playerData.getTrimPattern().getKey().getKey())) : line.replace("%SELECTED%", "None");
+                    itemLore.set(i, line);
+                }
+                if(line.contains("%MAX%")) {
+                    line = line.replace("%MAX%", String.valueOf(DataManager.getMaxTrimPatterns()));
                     itemLore.set(i, line);
                 }
             }

@@ -16,6 +16,7 @@ public class PlayerData {
     private TrimPattern previousPattern;
     private ItemStack editingItem;
 
+
     public PlayerData(Player player, ItemStack editingItem, TrimMaterial material, TrimPattern pattern) {
         this.player = player;
         this.editingItem = editingItem;
