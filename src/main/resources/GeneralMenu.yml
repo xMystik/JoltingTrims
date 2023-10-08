@@ -25,10 +25,10 @@ apply-changes-failure-sound: BLOCK_DISPENSER_FAIL
 #
 # USEFUL LORE PLACEHOLDERS
 #
-# %MAX_MATERIALS% - Shows the amount of enabled materials
-# %MAX_PATTERNS% - Shows the amount of enabled patterns
-# %UNLOCKED_MATERIALS% - Shows the amount of unlocked materials of the player
-# %UNLOCKED_PATTERNS% - Shows the amount of unlocked patterns of the player
+# %MAX_MATERIALS% - Shows the number of enabled materials
+# %MAX_PATTERNS% - Shows the number of enabled patterns
+# %UNLOCKED_MATERIALS% - Shows the number of unlocked materials of the player
+# %UNLOCKED_PATTERNS% - Shows the number of unlocked patterns of the player
 # %SELECTED_MATERIAL% - Shows the currently selected material of the player
 # %SELECTED_PATTERN% - Shows the currently selected pattern of the player
 Layout:
@@ -88,8 +88,8 @@ Layout:
     lore:
       - '&7Click here to select a material!'
       - '&7'
-      - '&7Unlocked Materials &8- &e%UNLOCKED-MATERIALS%&8/&e%MAX-MATERIALS%'
-      - '&7Currently Selected &8- &e%SELECTED-MATERIAL%'
+      - '&7Unlocked Materials &8- &e%UNLOCKED_MATERIALS%&8/&e%MAX_MATERIALS%'
+      - '&7Currently Selected &8- &e%SELECTED_MATERIAL%'
     slots:
       - 20
   Pattern-Menu-Item:
@@ -100,8 +100,8 @@ Layout:
     lore:
       - '&7Click here to select a pattern!'
       - '&7'
-      - '&7Unlocked Patterns &8- &e%UNLOCKED-PATTERNS%&8/&e%MAX-PATTERNS%'
-      - '&7Currently Selected &8- &e%SELECTED-PATTERN%'
+      - '&7Unlocked Patterns &8- &e%UNLOCKED_PATTERNS%&8/&e%MAX_PATTERNS%'
+      - '&7Currently Selected &8- &e%SELECTED_PATTERN%'
     slots:
       - 24
   Finalize-Menu-Item:
