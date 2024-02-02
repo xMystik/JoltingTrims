@@ -1,16 +1,17 @@
-package me.skript.joltingtrims.Utilities;
+package me.skript.joltingtrims.utilities;
 
-import me.skript.joltingtrims.Data.CacheData.DataManager;
-import me.skript.joltingtrims.Data.CacheData.PlayerData;
+import me.skript.joltingtrims.data.tempdata.DataManager;
+import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.Enums.ItemType;
-import me.skript.joltingtrims.Utilities.Enums.ToastType;
+import me.skript.joltingtrims.utilities.enums.ToastType;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,8 +20,6 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class JUtil {
 
@@ -29,20 +28,156 @@ public class JUtil {
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
-    public static String formatWithHex(String text) {
-        if(Bukkit.getVersion().contains("1.16") || Bukkit.getVersion().contains("1.17") || Bukkit.getVersion().contains("1.18") || Bukkit.getVersion().contains("1.19") || Bukkit.getVersion().contains("1.20")) {
-            final Pattern pattern = Pattern.compile("&#[a-fA-F0-9]{6}");
+    public static String formatWithColorCodesAndHex(final String textToTranslate) {
+        final char altColorChar = '&';
+        final StringBuilder b = new StringBuilder();
+        final char[] mess = textToTranslate.toCharArray();
+        boolean color = false, hashtag = false, doubleTag = false;
+        char tmp; // Used in loops
 
-            Matcher match = pattern.matcher(text);
+        for (int i = 0; i < mess.length; ) { // i increment is handled case by case for speed
 
-            while(match.find()) {
-                String color = text.substring(match.start(), match.end());
-                text = text.replace(color, ChatColor.valueOf(color) + "");
-                match = pattern.matcher(text);
+            final char c = mess[i];
+
+            if (doubleTag) { // DoubleTag module
+                doubleTag = false;
+
+                final int max = i + 3;
+
+                if (max <= mess.length) {
+                    // There might be a hex color here
+                    boolean match = true;
+
+                    for (int n = i; n < max; n++) {
+                        tmp = mess[n];
+                        // The order of the checks below is meant to improve performances (i.e. capital letters check is at the end)
+                        if (!((tmp >= '0' && tmp <= '9') || (tmp >= 'a' && tmp <= 'f') || (tmp >= 'A' && tmp <= 'F'))) {
+                            // It wasn't a hex color, appending found chars to the StringBuilder and continue the for loop
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (match) {
+                        b.append(ChatColor.COLOR_CHAR);
+                        b.append('x');
+
+                        // Copy colors with a color code in between
+                        for (; i < max; i++) {
+                            tmp = mess[i];
+                            b.append(ChatColor.COLOR_CHAR);
+                            b.append(tmp);
+                            // Double the color code
+                            b.append(ChatColor.COLOR_CHAR);
+                            b.append(tmp);
+                        }
+
+                        // i increment has been already done
+                        continue;
+                    }
+                }
+
+                b.append(altColorChar);
+                b.append("##");
+                // Malformed hex, let's carry on checking mess[i]
             }
 
+            if (hashtag) { // Hashtagmodule
+                hashtag = false;
+
+                // Check for double hashtag (&##123 => &#112233)
+                if (c == '#') {
+                    doubleTag = true;
+                    i++;
+                    continue;
+                }
+
+                final int max = i + 6;
+
+                if (max <= mess.length) {
+                    // There might be a hex color here
+                    boolean match = true;
+
+                    for (int n = i; n < max; n++) {
+                        tmp = mess[n];
+                        // The order of the checks below is meant to improve performances (i.e. capital letters check is at the end)
+                        if (!((tmp >= '0' && tmp <= '9') || (tmp >= 'a' && tmp <= 'f') || (tmp >= 'A' && tmp <= 'F'))) {
+                            // It wasn't a hex color, appending found chars to the StringBuilder and continue the for loop
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (match) {
+                        b.append(ChatColor.COLOR_CHAR);
+                        b.append('x');
+
+                        // Copy colors with a color code in between
+                        for (; i < max; i++) {
+                            b.append(ChatColor.COLOR_CHAR);
+                            b.append(mess[i]);
+                        }
+                        // i increment has been already done
+                        continue;
+                    }
+                }
+
+                b.append(altColorChar);
+                b.append('#');
+                // Malformed hex, let's carry on checking mess[i]
+            }
+
+
+            if (color) { // Color module
+                color = false;
+
+                if (c == '#') {
+                    hashtag = true;
+                    i++;
+                    continue;
+                }
+
+                // The order of the checks below is meant to improve performances (i.e. capital letters check is at the end)
+                if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || c == 'r' || (c >= 'k' && c <= 'o') || (c >= 'A' && c <= 'F') || c == 'R' || (c >= 'K' && c <= 'O')) {
+                    b.append(ChatColor.COLOR_CHAR);
+                    b.append(c);
+                    i++;
+                    continue;
+                }
+
+                b.append(altColorChar);
+                // Not a valid color, let's carry on checking mess[i]
+            }
+
+            // Base case
+            if (c == altColorChar) { // c == '&'
+                color = true;
+                i++;
+                continue;
+            }
+
+            // None matched, append current character
+            b.append(c);
+            i++;
+
         }
-        return ChatColor.translateAlternateColorCodes('&', text);
+
+        // Append '&' if '&' was the last character of the string
+        if (color)
+            b.append(altColorChar);
+        else // color and hashtag cannot be true at the same time
+            // Append "&#" if "&#" were the last characters of the string
+            if (hashtag) {
+                b.append(altColorChar);
+                b.append('#');
+            } else // color, hashtag, and doubleTag cannot be true at the same time
+                // Append "&##" if "&##" were the last characters of the string
+                if (doubleTag) {
+                    b.append(altColorChar);
+                    b.append("##");
+                }
+
+        return b.toString();
     }
     //------------------------------------------------------------------------------------\\
 
@@ -72,7 +207,7 @@ public class JUtil {
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection, Player player) {
-        PlayerData playerData = DataManager.getOrCreatePlayerData(player);
+        PlayerData playerData = JoltingTrims.getInstance().getDataManager().getOrCreatePlayerData(player);
         List<String> itemLore = itemSection.getStringList("lore");
 
         itemLore = replacePlaceholders(itemLore, playerData);
@@ -91,10 +226,10 @@ public class JUtil {
 
         for (String line : itemLore) {
             if(line.contains("%UNLOCKED_MATERIALS%")) {
-                line = line.replace("%UNLOCKED_MATERIALS%", String.valueOf(DataManager.getUnlockedTrimMaterials(playerData.getPlayer())));
+                line = line.replace("%UNLOCKED_MATERIALS%", String.valueOf(JoltingTrims.getInstance().getDataManager().getUnlockedTrimMaterials(playerData.getPlayer())));
             }
             if(line.contains("%UNLOCKED_PATTERNS%")) {
-                line = line.replace("%UNLOCKED_PATTERNS%", String.valueOf(DataManager.getUnlockedTrimPatterns(playerData.getPlayer())));
+                line = line.replace("%UNLOCKED_PATTERNS%", String.valueOf(JoltingTrims.getInstance().getDataManager().getUnlockedTrimPatterns(playerData.getPlayer())));
             }
             if(line.contains("%SELECTED_MATERIAL%")) {
                 line = line.replace("%SELECTED_MATERIAL%", playerData.getTrimMaterial() != null ? capitalizeWords(playerData.getTrimMaterial().getKey().getKey()) : "None");
@@ -103,10 +238,10 @@ public class JUtil {
                 line = line.replace("%SELECTED_PATTERN%", playerData.getTrimPattern() != null ? capitalizeWords(playerData.getTrimPattern().getKey().getKey()) : "None");
             }
             if(line.contains("%MAX_MATERIALS%")) {
-                line = line.replace("%MAX_MATERIALS%", String.valueOf(DataManager.getMaxTrimMaterials()));
+                line = line.replace("%MAX_MATERIALS%", String.valueOf(JoltingTrims.getInstance().getDataManager().getMaxTrimMaterials()));
             }
             if(line.contains("%MAX_PATTERNS%")) {
-                line = line.replace("%MAX_PATTERNS%", String.valueOf(DataManager.getMaxTrimPatterns()));
+                line = line.replace("%MAX_PATTERNS%", String.valueOf(JoltingTrims.getInstance().getDataManager().getMaxTrimPatterns()));
             }
             modifiedLore.add(line);
         }
@@ -384,6 +519,30 @@ public class JUtil {
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.removeEnchant(Enchantment.PROTECTION_ENVIRONMENTAL); // Change the enchantment type if needed
         item.setItemMeta(itemMeta);
+    }
+
+    public static void lockInventory(InventoryClickEvent event) {
+        if(event.getClickedInventory() == null || event.getCurrentItem() == null) {
+            return;
+        }
+
+        InventoryHolder holder = event.getClickedInventory().getHolder();
+
+        if(holder instanceof JMenu || holder instanceof Player) {
+            event.setCancelled(true);
+        }
+    }
+
+    public static void lockInventory(InventoryClickEvent event, Inventory inventory) {
+        if(event.getClickedInventory() == null || event.getCurrentItem() == null) {
+            return;
+        }
+
+        InventoryHolder holder = event.getClickedInventory().getHolder();
+
+        if(inventory.getHolder() instanceof Player || inventory.getHolder() instanceof JMenu) {
+            event.setCancelled(true);
+        }
     }
 
 }

@@ -1,11 +1,11 @@
-package me.skript.joltingtrims.Listeners;
+package me.skript.joltingtrims.listeners;
 
-import me.skript.joltingtrims.Data.CacheData.DataManager;
-import me.skript.joltingtrims.Data.CacheData.PlayerData;
+import me.skript.joltingtrims.data.tempdata.DataManager;
+import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Menus.GeneralMenu;
-import me.skript.joltingtrims.Utilities.*;
-import me.skript.joltingtrims.Utilities.Enums.ItemType;
+import me.skript.joltingtrims.menus.GeneralMenu;
+import me.skript.joltingtrims.utilities.*;
+import me.skript.joltingtrims.utilities.enums.ItemType;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -22,9 +22,11 @@ import java.util.List;
 public class MaterialMenuListener implements Listener {
 
     private JoltingTrims plugin;
+    private DataManager dataManager;
 
     public MaterialMenuListener(JoltingTrims plugin) {
         this.plugin = plugin;
+        dataManager = plugin.getDataManager();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -69,7 +71,7 @@ public class MaterialMenuListener implements Listener {
                     // Check if it's a valid item section and the clicked item is a config item
                     if (JUtil.isValidItemSection(materialName, slots) && JUtil.isConfigItem(clickedItem, itemSection)) {
                         if (type.equals(ItemType.GENERAL_MENU_OPENER.getString())) {
-                            new GeneralMenu().openMenu(player);
+                            new GeneralMenu(player).openMenu();
                             JUtil.playSound(player, plugin.getMaterialMenuFile().getString("button-click-sound"));
                         }
                     }
@@ -98,7 +100,7 @@ public class MaterialMenuListener implements Listener {
 
     private void handleMaterialClick(Player player, ItemStack clickedItem, ConfigurationSection matSection, InventoryClickEvent event) {
         List<String> itemLore = plugin.getMaterialMenuFile().getStringList("materials-lore");
-        PlayerData playerData = DataManager.getOrCreatePlayerData(player);
+        PlayerData playerData = dataManager.getOrCreatePlayerData(player);
 
         for (int i = 0; i < itemLore.size(); i++) {
             String loreLine = itemLore.get(i);
@@ -152,11 +154,12 @@ public class MaterialMenuListener implements Listener {
     public void onMaterialMenuClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
 
+        // TODO - CHECK FOR ArrayIndexOutOfBoundsException
         if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-            if(DataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
-                player.getInventory().addItem(DataManager.getOrCreatePlayerData(player).getEditingItem());
+            if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
+                player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
             }
-            DataManager.clearPlayerData(player);
+            dataManager.clearPlayerData(player);
         }
     }
 }

@@ -1,4 +1,4 @@
-package me.skript.joltingtrims.Utilities.Enums;
+package me.skript.joltingtrims.utilities.enums;
 
 public enum ToastType {
 

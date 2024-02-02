@@ -1,9 +1,9 @@
-package me.skript.joltingtrims.Commands;
+package me.skript.joltingtrims.commands;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Menus.GeneralMenu;
-import me.skript.joltingtrims.Utilities.JUtil;
-import me.skript.joltingtrims.Data.CacheData.DataManager;
+import me.skript.joltingtrims.menus.GeneralMenu;
+import me.skript.joltingtrims.utilities.JUtil;
+import me.skript.joltingtrims.data.tempdata.DataManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,10 +18,13 @@ import java.util.List;
 public class TrimCommand implements CommandExecutor, TabCompleter {
 
     private JoltingTrims plugin;
+    private DataManager dataManager;
     private final String cmd = "trim";
 
     public TrimCommand(JoltingTrims plugin) {
         this.plugin = plugin;
+
+        this.dataManager = plugin.getDataManager();
 
         plugin.getCommand(cmd).setExecutor(this);
     }
@@ -38,7 +41,7 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("menu")) {
                         if ((sender.hasPermission("joltingtrims.menu") && plugin.getConfigurationFile().getBoolean("trim-command")) || sender.isOp()) {
-                            new GeneralMenu().openMenu(player);
+                            new GeneralMenu(player).openMenu();
                         }
                         else {
                             player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
@@ -47,8 +50,8 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                     }
                     else if (args[0].equalsIgnoreCase("reload")) {
                         if (sender.hasPermission("joltingtrims.reload") || sender.isOp()) {
-                            DataManager.startReloading();
-                            DataManager.closeAllMenus();
+                            dataManager.startReloading();
+                            dataManager.closeAllMenus();
                             plugin.reloadConfigurationFile();
                             plugin.reloadGeneralMenuFile();
                             plugin.reloadMessagesFile();
@@ -62,7 +65,7 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     else if(args[0].equalsIgnoreCase("version")) {
-                        player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version: &e&l1.0.1"));
+                        player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version: &e&l1.0.4"));
                         return true;
                     }
                     else {

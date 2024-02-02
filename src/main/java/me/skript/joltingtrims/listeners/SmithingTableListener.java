@@ -1,7 +1,7 @@
-package me.skript.joltingtrims.Listeners;
+package me.skript.joltingtrims.listeners;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Menus.GeneralMenu;
+import me.skript.joltingtrims.menus.GeneralMenu;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class SmithingTableListener implements Listener {
         if(plugin.getConfigurationFile().getBoolean("replace-smithing-table")) {
             if(clickedBlock != null && clickedBlock.getType() == Material.SMITHING_TABLE && action == Action.RIGHT_CLICK_BLOCK) {
                 event.setCancelled(true);
-                new GeneralMenu().openMenu(player);
+                new GeneralMenu(player).openMenu();
             }
         }
     }

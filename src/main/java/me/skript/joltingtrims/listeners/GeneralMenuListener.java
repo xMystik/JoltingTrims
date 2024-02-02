@@ -1,19 +1,18 @@
-package me.skript.joltingtrims.Listeners;
+package me.skript.joltingtrims.listeners;
 
-
-import me.skript.joltingtrims.Data.CacheData.DataManager;
-import me.skript.joltingtrims.Data.CacheData.PlayerData;
+import me.skript.joltingtrims.data.tempdata.DataManager;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Menus.MaterialMenu;
-import me.skript.joltingtrims.Menus.PatternMenu;
-import me.skript.joltingtrims.Utilities.*;
-import me.skript.joltingtrims.Utilities.Enums.ItemType;
+import me.skript.joltingtrims.data.tempdata.PlayerData;
+import me.skript.joltingtrims.menus.GeneralMenu;
+import me.skript.joltingtrims.menus.MaterialMenu;
+import me.skript.joltingtrims.menus.PatternMenu;
+import me.skript.joltingtrims.utilities.*;
+import me.skript.joltingtrims.utilities.enums.ItemType;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
@@ -24,30 +23,83 @@ import java.util.List;
 public class GeneralMenuListener implements Listener {
 
     private JoltingTrims plugin;
+    private DataManager dataManager;
 
     public GeneralMenuListener(JoltingTrims plugin) {
         this.plugin = plugin;
+        dataManager = plugin.getDataManager();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     public void onGeneralMenuClick(InventoryClickEvent event) {
-
-        if (event.getClickedInventory() == null || event.getCurrentItem() == null) {
+        if (event.getClickedInventory() == null || event.getCurrentItem() == null || !(event.getWhoClicked() instanceof Player)) {
             return;
         }
 
-        if (event.getClickedInventory().getType() != InventoryType.CREATIVE && event.getView().getTitle().equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
-            Player player = (Player) event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
 
+        if(event.getView().getTopInventory().getHolder() instanceof GeneralMenu && event.getView().getBottomInventory().getHolder() instanceof Player) {
             event.setCancelled(true);
+
+            dataManager.getOrCreatePlayerData(player);
 
             // Handle all the Item movement clicks
             handleItemMovement(event, player);
 
             // Handle all the other Items on the menu
             handleOtherInteractions(event, player, event.getView().getTopInventory());
+        }
+    }
+
+    @EventHandler
+    public void onGeneralMenuOpen(InventoryOpenEvent event) {
+        Inventory inventory = event.getInventory();
+        String inventoryTitle = event.getView().getTitle();
+        Player player = (Player) event.getPlayer();
+
+        if (inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
+            ItemStack savedEditItem = dataManager.getOrCreatePlayerData(player).getEditingItem();
+            if (savedEditItem != null) {
+                inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), savedEditItem);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onGeneralMenuClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
+        String inventoryTitle = event.getView().getTitle();
+        Player player = (Player) event.getPlayer();
+        ItemStack editItem = event.getInventory().getItem(plugin.getGeneralMenuFile().getInt("item-slot"));
+
+        // Check if InventoryClose was caused to open a new Inventory
+        if(event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
+            if(inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JUtil.isArmorPiece(editItem.getType())) {
+                dataManager.getOrCreatePlayerData(player).setEditingItem(editItem);
+            }
+        }
+        // Check if the reason is the plugin /reload command
+        else if(event.getReason().equals(InventoryCloseEvent.Reason.PLUGIN)) {
+            // TODO - CHECK FOR ArrayIndexOutOfBoundsException
+            // Check if the files are reloading
+            if(dataManager.isReloading()) {
+                // If they are then check if the player's saved item is not null
+                if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
+                    // If its not null then give the item back to the player
+                    player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
+                }
+            }
+            // Clear the player data
+            dataManager.clearPlayerData(player);
+        }
+        else {
+            if(inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JUtil.isArmorPiece(editItem.getType())) {
+                dataManager.clearPlayerData(player);
+                inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), new ItemStack(Material.AIR));
+                player.getInventory().addItem(editItem);
+            }
         }
     }
 
@@ -64,7 +116,7 @@ public class GeneralMenuListener implements Listener {
             ItemStack currentSlotItem = topInventory.getItem(guiSlot);
 
             if (currentSlotItem != null) {
-                DataManager.clearPlayerData(player);
+                dataManager.clearPlayerData(player);
                 player.getInventory().addItem(currentSlotItem);
                 topInventory.setItem(guiSlot, null);
             }
@@ -74,15 +126,14 @@ public class GeneralMenuListener implements Listener {
             ItemStack currentSlotItem = topInventory.getItem(guiSlot);
 
             if (currentSlotItem != null) {
-                DataManager.clearPlayerData(player);
+                dataManager.clearPlayerData(player);
                 player.getInventory().addItem(currentSlotItem);
             }
 
-            DataManager.getOrCreatePlayerData(player).setEditingItem(clickedItem);
+            dataManager.getOrCreatePlayerData(player).setEditingItem(clickedItem);
             topInventory.setItem(guiSlot, clickedItem);
         }
     }
-
 
     private void handleOtherInteractions(InventoryClickEvent event, Player player, Inventory topInventory) {
         ConfigurationSection layoutSection = plugin.getGeneralMenuFile().getConfigurationSection("Layout");
@@ -134,57 +185,8 @@ public class GeneralMenuListener implements Listener {
                 return;
             }
 
-            PlayerData playerData = DataManager.getOrCreatePlayerData(player);
-            player.getInventory().addItem(JTrimBuilder.setupItem(playerData));
-        }
-    }
-
-    @EventHandler
-    public void onGeneralMenuOpen(InventoryOpenEvent event) {
-        Inventory inventory = event.getInventory();
-        String inventoryTitle = event.getView().getTitle();
-        Player player = (Player) event.getPlayer();
-
-        if (inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title")))) {
-            ItemStack savedEditItem = DataManager.getOrCreatePlayerData(player).getEditingItem();
-            if (savedEditItem != null) {
-                inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), savedEditItem);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onGeneralMenuClose(InventoryCloseEvent event) {
-        Inventory inventory = event.getInventory();
-        String inventoryTitle = event.getView().getTitle();
-        Player player = (Player) event.getPlayer();
-        ItemStack editItem = event.getInventory().getItem(plugin.getGeneralMenuFile().getInt("item-slot"));
-
-        // Check if InventoryClose was caused to open a new Inventory
-        if(event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-            if(inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JUtil.isArmorPiece(editItem.getType())) {
-                DataManager.getOrCreatePlayerData(player).setEditingItem(editItem);
-            }
-        }
-        // Check if the reason is the plugin /reload command
-        else if(event.getReason().equals(InventoryCloseEvent.Reason.PLUGIN)) {
-            // Check if the files are reloading
-            if(DataManager.isReloading()) {
-                // If they are then check if the player's saved item is not null
-                if(DataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
-                    // If its not null then give the item back to the player
-                    player.getInventory().addItem(DataManager.getOrCreatePlayerData(player).getEditingItem());
-                }
-            }
-            // Clear the player data
-            DataManager.clearPlayerData(player);
-        }
-        else {
-            if(inventoryTitle.equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) && editItem != null && JUtil.isArmorPiece(editItem.getType())) {
-                DataManager.clearPlayerData(player);
-                inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), new ItemStack(Material.AIR));
-                player.getInventory().addItem(editItem);
-            }
+            PlayerData playerData = dataManager.getOrCreatePlayerData(player);
+            player.getInventory().addItem(JTrimFactory.setupItem(playerData));
         }
     }
 

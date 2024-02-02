@@ -1,10 +1,10 @@
-package me.skript.joltingtrims.Menus;
+package me.skript.joltingtrims.menus;
 
-import me.skript.joltingtrims.Data.CacheData.DataManager;
-import me.skript.joltingtrims.Data.CacheData.PlayerData;
+import me.skript.joltingtrims.data.tempdata.DataManager;
+import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.JItemBuilder;
-import me.skript.joltingtrims.Utilities.JUtil;
+import me.skript.joltingtrims.utilities.JItemBuilder;
+import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,6 +20,7 @@ import java.util.List;
 public class PatternMenu {
 
     private JoltingTrims plugin = JoltingTrims.getInstance();
+    private final DataManager dataManager = plugin.getDataManager();
 
     public void openMenu(Player player) {
         Inventory inv = Bukkit.createInventory(player, plugin.getPatternMenuFile().getInt("menu-size"), JUtil.format(plugin.getPatternMenuFile().getString("menu-title")));
@@ -32,7 +33,7 @@ public class PatternMenu {
 
         if (patternsSection != null) {
 
-            PlayerData playerData = DataManager.getOrCreatePlayerData(player);
+            PlayerData playerData = dataManager.getOrCreatePlayerData(player);
             TrimPattern selectedTrimPattern = playerData.getTrimPattern();
 
             for (String patName : patternsSection.getKeys(false)) {

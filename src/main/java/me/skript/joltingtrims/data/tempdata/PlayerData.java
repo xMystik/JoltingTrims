@@ -1,6 +1,6 @@
-package me.skript.joltingtrims.Data.CacheData;
+package me.skript.joltingtrims.data.tempdata;
 
-import me.skript.joltingtrims.Utilities.JUtil;
+import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

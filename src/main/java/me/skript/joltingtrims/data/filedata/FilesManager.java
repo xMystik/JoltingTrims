@@ -1,7 +1,7 @@
-package me.skript.joltingtrims.Data.FileData;
+package me.skript.joltingtrims.data.filedata;
 
-import me.skript.joltingtrims.JoltingTrims;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.*;
@@ -13,15 +13,16 @@ import java.util.*;
 *
 */
 
-public class FilesManager {
+public class FilesManager<T extends Plugin> {
 
-    private JoltingTrims plugin;
-    private HashMap<String, ConfigFile> filesMap = new HashMap<String, ConfigFile>();
+    private T plugin;
+    private HashMap<String, ConfigFile<T>> filesMap = new HashMap<>();
 
     //------------------------------[ Manager Constructors Start ]-----------------------------//
     //We're making the constructors that initializes the file manager.
     //We're initializing the files manager by specifying the plugin.
-    public FilesManager(JoltingTrims plugin) {
+    // We're initializing the files manager by specifying the plugin.
+    public FilesManager(T plugin) {
         this.plugin = plugin;
     }
     //-------------------------------[ Manager Constructors End ]------------------------------//
@@ -73,70 +74,66 @@ public class FilesManager {
     //----------------------------------[ File Creation End ]----------------------------------//
 
     //------------------------------------[ Methods Start ]------------------------------------//
-    //Used to delete a configuration file.
-    public void deleteFile(ConfigFile fileName) {
-        if(fileName.getConfigFile().exists()) {
+    // Used to delete a configuration file.
+    public void deleteFile(ConfigFile<T> fileName) {
+        if (fileName.getConfigFile().exists()) {
             fileName.getConfigFile().delete();
             filesMap.remove(fileName.getFolderPath());
-            Bukkit.getConsoleSender().sendMessage("Successfully deleted file. [" + fileName.getFileName() + "]");
-        }
-        else {
+        } else {
             Bukkit.getConsoleSender().sendMessage("Unable to delete file. [" + fileName.getFileName() + "]");
         }
     }
 
-    //Used to return a specific configuration file.
-    public ConfigFile getFile(String fileName) {
+    // Used to return a specific configuration file.
+    public ConfigFile<T> getFile(String fileName) {
         return filesMap.get(fileName);
     }
 
-    //Used to return all configuration files as a HashMap.
-    public HashMap<String, ConfigFile> getAllRegisteredConfigs() {
+    // Used to return all configuration files as a HashMap.
+    public HashMap<String, ConfigFile<T>> getAllRegisteredConfigs() {
         return filesMap;
     }
 
-    //Used to return a HashMap with all the paths and configs on the specified folder.
-    public HashMap<String, ConfigFile> getAllConfigs(String filesPath) {
-        HashMap<String, ConfigFile> map = new HashMap<>();
-        for(Map.Entry file : filesMap.entrySet()) {
+    // Used to return a HashMap with all the paths and configs on the specified folder.
+    public HashMap<String, ConfigFile<T>> getAllConfigs(String filesPath) {
+        HashMap<String, ConfigFile<T>> map = new HashMap<>();
+        for (Map.Entry<String, ConfigFile<T>> file : filesMap.entrySet()) {
             String fileName = filesMap.get(file.getKey()).getConfigFile().getName();
-            String path = ((String)file.getKey()).replace("/" + fileName, "");
-            if(path.equals(filesPath)) {
-                map.put(file.getKey() + "", (ConfigFile)file.getValue());
+            String path = file.getKey().replace("/" + fileName, "");
+            if (path.equals(filesPath)) {
+                map.put(file.getKey() + "", file.getValue());
             }
         }
         return map;
     }
 
-    //Used to return a HashMap with all the paths and configs of the specified folder even if they are not registered.
-    public HashMap<String, ConfigFile> getAllFiles(String filesPath) {
-        HashMap<String, ConfigFile> map = new HashMap<>();
+    // Used to return a HashMap with all the paths and configs of the specified folder even if they are not registered.
+    public HashMap<String, ConfigFile<T>> getAllFiles(String filesPath) {
+        HashMap<String, ConfigFile<T>> map = new HashMap<>();
         String folderPath;
 
-        if(filesPath.contains("/")) {
+        if (filesPath.contains("/")) {
             folderPath = filesPath.replace("default/", "");
-        }
-        else {
+        } else {
             folderPath = "default";
         }
 
         File folder;
 
-        if(folderPath.equals("default")) {
+        if (folderPath.equals("default")) {
             folder = new File(plugin.getDataFolder() + "");
-            for(File file : folder.listFiles()) {
-                if(!file.isDirectory()) {
-                    ConfigFile confFile = fileSetup(file.getName().replace(".yml", ""));
+            for (File file : folder.listFiles()) {
+                if (!file.isDirectory()) {
+                    ConfigFile<T> confFile = fileSetup(file.getName().replace(".yml", ""));
                     map.put(folderPath + "/" + file.getName(), confFile);
                     filesMap.put(folderPath + "/" + file.getName(), confFile);
                 }
             }
-        }
-        else {
+        } else {
             folder = new File(plugin.getDataFolder() + "/" + folderPath);
-            for(File file : folder.listFiles()) {
-                if(!file.isDirectory()) {
-                    ConfigFile confFile = fileSetup(file.getName().replace(".yml", ""), folderPath);
+            for (File file : folder.listFiles()) {
+                if (!file.isDirectory()) {
+                    ConfigFile<T> confFile = fileSetup(file.getName().replace(".yml", ""), folderPath);
                     map.put("default/" + folderPath + "/" + file.getName(), confFile);
                     filesMap.put("default/" + folderPath + "/" + file.getName(), confFile);
                 }

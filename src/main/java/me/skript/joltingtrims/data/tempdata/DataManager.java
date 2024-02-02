@@ -1,40 +1,41 @@
-package me.skript.joltingtrims.Data.CacheData;
+package me.skript.joltingtrims.data.tempdata;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.JUtil;
+import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class DataManager {
 
-    private static JoltingTrims plugin;
-    private static boolean reloadFlag = false;
-    private static HashMap<Player, PlayerData> managerMap = new HashMap<>();
+    private JoltingTrims plugin;
+    private boolean reloadFlag = false;
+    private HashMap<UUID, PlayerData> managerMap = new HashMap<>();
 
     public DataManager(JoltingTrims plugin) {
         this.plugin = plugin;
     }
 
-    public static PlayerData getOrCreatePlayerData(Player player) {
-        if(managerMap.containsKey(player)) {
-            return managerMap.get(player);
+    public PlayerData getOrCreatePlayerData(Player player) {
+        if(managerMap.containsKey(player.getUniqueId())) {
+            return managerMap.get(player.getUniqueId());
         }
         else {
             PlayerData data = new PlayerData(player);
-            managerMap.put(player, data);
+            managerMap.put(player.getUniqueId(), data);
             return data;
         }
     }
 
-    public static void clearPlayerData(Player player) {
-        managerMap.remove(player);
+    public void clearPlayerData(Player player) {
+        managerMap.remove(player.getUniqueId());
     }
 
-    public static void closeAllMenus() {
+    public void closeAllMenus() {
         // Loop through all the online players
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             // Get their open inventory if there is any
@@ -51,15 +52,15 @@ public class DataManager {
         }
     }
 
-    public static boolean startReloading() {
+    public boolean startReloading() {
         reloadFlag = true;
         return true;
     }
-    public static boolean isReloading() {
+    public boolean isReloading() {
         return reloadFlag;
     }
 
-    public static int getUnlockedTrimMaterials(Player player) {
+    public int getUnlockedTrimMaterials(Player player) {
         int counter = 0;
         ConfigurationSection materialsSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
 
@@ -75,7 +76,7 @@ public class DataManager {
         return counter;
     }
 
-    public static int getUnlockedTrimPatterns(Player player) {
+    public int getUnlockedTrimPatterns(Player player) {
         int counter = 0;
         ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
 
@@ -91,7 +92,7 @@ public class DataManager {
         return counter;
     }
 
-    public static int getMaxTrimPatterns() {
+    public int getMaxTrimPatterns() {
         ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
         int count = 0;
 
@@ -107,7 +108,7 @@ public class DataManager {
         return count;
     }
 
-    public static int getMaxTrimMaterials() {
+    public int getMaxTrimMaterials() {
         ConfigurationSection materialsSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
         int count = 0;
 

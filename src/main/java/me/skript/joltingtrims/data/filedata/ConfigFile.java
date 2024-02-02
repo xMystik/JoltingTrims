@@ -1,9 +1,10 @@
-package me.skript.joltingtrims.Data.FileData;
+package me.skript.joltingtrims.data.filedata;
 
 import me.skript.joltingtrims.JoltingTrims;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 
@@ -14,9 +15,9 @@ import java.io.*;
  *
  */
 
-public class ConfigFile {
+public class ConfigFile<T extends Plugin> {
 
-    private JoltingTrims plugin;
+    private T plugin;
     private File file;
     private FileConfiguration config;
     private String fileAsName;
@@ -24,8 +25,8 @@ public class ConfigFile {
 
     //----------------------------[ ConfigFiles Constructors Start ]----------------------------//
     //Used to create a config file on the default plugins path.
-    public ConfigFile(JoltingTrims pluginName, String fileName) {
-        plugin = pluginName;
+    public ConfigFile(T plugin, String fileName) {
+        this.plugin = plugin;
         file = new File(plugin.getDataFolder(), fileName + ".yml");
         fileAsName = fileName;
         folderPath = "default/" + fileName + ".yml";
@@ -35,8 +36,8 @@ public class ConfigFile {
     }
 
     //Used to create a config file on the specified path.
-    public ConfigFile(JoltingTrims pluginName, String fileName, String folderPathName) {
-        plugin = pluginName;
+    public ConfigFile(T plugin, String fileName, String folderPathName) {
+        this.plugin = plugin;
         file = new File(plugin.getDataFolder() + "/" + folderPathName, fileName + ".yml");
         fileAsName = fileName;
         folderPath = folderPathName + "/" + fileName + ".yml";
@@ -46,8 +47,8 @@ public class ConfigFile {
     }
 
     //Used to create a config file on the specified path(s).
-    public ConfigFile(JoltingTrims pluginName, String fileName, String... folderPathName) {
-        plugin = pluginName;
+    public ConfigFile(T plugin, String fileName, String... folderPathName) {
+        this.plugin = plugin;
         String path = "default";
         for(String s : folderPathName) {
             path += "/" + s;
@@ -125,7 +126,4 @@ public class ConfigFile {
         }
     }
     //-------------------------------[ ConfigFiles Methods End ]--------------------------------//
-
-    //---------------------------[ ConfigFiles Extra Methods Start ]----------------------------//
-    //----------------------------[ ConfigFiles Extra Methods End ]-----------------------------//
 }

@@ -1,7 +1,7 @@
-package me.skript.joltingtrims.Utilities;
+package me.skript.joltingtrims.utilities;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.Utilities.Enums.ToastType;
+import me.skript.joltingtrims.utilities.enums.ToastType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

@@ -1,42 +1,35 @@
-package me.skript.joltingtrims.Utilities;
+package me.skript.joltingtrims.utilities;
 
+import me.skript.joltingtrims.JoltingTrims;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /*
     Author: Skript
-    Date: 28/09/2023
+    Date: 31/01/2024
  */
 
 
 public class JItemBuilder {
 
-    private ItemStack item;
-    private ItemMeta meta;
-    private boolean unbreakable = true;
+    private final JoltingTrims plugin = JoltingTrims.getInstance();
+    private final ItemStack item;
+    private final ItemMeta meta;
+    private final boolean unbreakable = true;
 
     public JItemBuilder(Material material) {
         this.item = new ItemStack(material);
         this.meta = item.getItemMeta();
-    }
-
-    public JItemBuilder setPlayerSkullTexture(String base64Texture) {
-        if (meta instanceof SkullMeta) {
-            SkullMeta skullMeta = (SkullMeta) meta;
-            skullMeta.setOwner(UUID.randomUUID().toString());
-            setSkullTexture(skullMeta, base64Texture);
-        }
-        return this;
     }
 
     public JItemBuilder setPlayerSkull(String playerName) {
@@ -49,33 +42,6 @@ public class JItemBuilder {
             item.setItemMeta(skullMeta);
         }
         return this;
-    }
-
-    private void setSkullTexture(SkullMeta meta, String texture) {
-        try {
-            Class<?> profileClass = Class.forName("com.mojang.authlib.GameProfile");
-            Class<?> propertyClass = Class.forName("com.mojang.authlib.properties.Property");
-            Method getProperties = profileClass.getDeclaredMethod("getProperties");
-
-            Object gameProfile = getProperties.invoke(meta);
-
-            List<Object> properties = (List<Object>) getProperties.invoke(gameProfile);
-            for (Object property : properties) {
-                Method getName = propertyClass.getDeclaredMethod("getName");
-                String name = (String) getName.invoke(property);
-                if (name.equalsIgnoreCase("textures")) {
-                    Method getValue = propertyClass.getDeclaredMethod("getValue");
-                    getValue.setAccessible(true);
-                    Object value = getValue.invoke(property);
-
-                    Method put = propertyClass.getDeclaredMethod("put", Object.class, Object.class);
-                    put.invoke(property, "textures", value);
-                    return;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public JItemBuilder setDisplayName(String displayName) {
@@ -152,6 +118,26 @@ public class JItemBuilder {
         lore.add(JUtil.format(loreLine));
         meta.setLore(lore);
         return this;
+    }
+
+    public JItemBuilder addIntTag(NamespacedKey key, int value) {
+        meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
+        return this;
+    }
+
+    public JItemBuilder addStringTag(NamespacedKey key, String value) {
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, value);
+        return this;
+    }
+
+    public JItemBuilder addIntTag(String key, int value) {
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        return addIntTag(namespacedKey, value);
+    }
+
+    public JItemBuilder addStringTag(String key, String value) {
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        return addStringTag(namespacedKey, value);
     }
 
     public ItemStack build() {

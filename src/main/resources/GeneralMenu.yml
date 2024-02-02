@@ -22,8 +22,7 @@ apply-changes-failure-sound: BLOCK_DISPENSER_FAIL
 # Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
 # Available Types: FILLER, MATERIAL_MENU_OPENER, PATTERN_MENU_OPENER, FINALIZE_CHANGES
 #
-#
-# USEFUL LORE PLACEHOLDERS
+# LORE PLACEHOLDERS
 #
 # %MAX_MATERIALS% - Shows the number of enabled materials
 # %MAX_PATTERNS% - Shows the number of enabled patterns
@@ -86,10 +85,10 @@ Layout:
     model: 0
     name: '&e&lMaterial Menu'
     lore:
-      - '&7Click here to select a material!'
-      - '&7'
       - '&7Unlocked Materials &8- &e%UNLOCKED_MATERIALS%&8/&e%MAX_MATERIALS%'
       - '&7Currently Selected &8- &e%SELECTED_MATERIAL%'
+      - '&7'
+      - '&7Click here to select a material!'
     slots:
       - 20
   Pattern-Menu-Item:
@@ -98,10 +97,10 @@ Layout:
     model: 0
     name: '&e&lPattern Menu'
     lore:
-      - '&7Click here to select a pattern!'
-      - '&7'
       - '&7Unlocked Patterns &8- &e%UNLOCKED_PATTERNS%&8/&e%MAX_PATTERNS%'
       - '&7Currently Selected &8- &e%SELECTED_PATTERN%'
+      - '&7'
+      - '&7Click here to select a pattern!'
     slots:
       - 24
   Finalize-Menu-Item:
@@ -110,6 +109,9 @@ Layout:
     model: 0
     name: '&a&lApply Changes'
     lore:
+      - '&7Selected Pattern &8- &e%SELECTED_PATTERN%'
+      - '&7Selected Material &8- &e%SELECTED_MATERIAL%'
+      - '&7'
       - '&7Click here to apply the changes!'
     slots:
       - 22
