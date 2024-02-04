@@ -1,7 +1,9 @@
 package me.skript.joltingtrims.data.tempdata;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.utilities.JUtil;
+import me.skript.joltingtrims.menus.GeneralMenu;
+import me.skript.joltingtrims.menus.MaterialMenu;
+import me.skript.joltingtrims.menus.PatternMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -12,9 +14,9 @@ import java.util.UUID;
 
 public class DataManager {
 
-    private JoltingTrims plugin;
+    private final JoltingTrims plugin;
     private boolean reloadFlag = false;
-    private HashMap<UUID, PlayerData> managerMap = new HashMap<>();
+    private final HashMap<UUID, PlayerData> managerMap = new HashMap<>();
 
     public DataManager(JoltingTrims plugin) {
         this.plugin = plugin;
@@ -42,10 +44,9 @@ public class DataManager {
             InventoryView openInventory = onlinePlayer.getOpenInventory();
 
             // Check if the opened inventory is one of the plugin's menus
-            if (openInventory.getTitle().equals(JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"))) ||
-                    openInventory.getTitle().equals(JUtil.format(plugin.getMaterialMenuFile().getString("menu-title"))) ||
-                    openInventory.getTitle().equals(JUtil.format(plugin.getPatternMenuFile().getString("menu-title")))) {
-
+            if(openInventory.getTopInventory().getHolder() instanceof GeneralMenu
+                    || openInventory.getTopInventory().getHolder() instanceof MaterialMenu
+                    || openInventory.getTopInventory().getHolder() instanceof PatternMenu) {
                 // Close the opened inventory
                 onlinePlayer.closeInventory();
             }
@@ -94,34 +95,34 @@ public class DataManager {
 
     public int getMaxTrimPatterns() {
         ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
-        int count = 0;
+        int counter = 0;
 
         if (patternsSection != null) {
             for (String patternKey : patternsSection.getKeys(false)) {
                 ConfigurationSection patternConfig = patternsSection.getConfigurationSection(patternKey);
                 if (patternConfig != null && patternConfig.getBoolean("enabled")) {
-                    count++;
+                    counter++;
                 }
             }
         }
 
-        return count;
+        return counter;
     }
 
     public int getMaxTrimMaterials() {
         ConfigurationSection materialsSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
-        int count = 0;
+        int counter = 0;
 
         if (materialsSection != null) {
             for (String materialKey : materialsSection.getKeys(false)) {
                 ConfigurationSection materialConfig = materialsSection.getConfigurationSection(materialKey);
                 if (materialConfig != null && materialConfig.getBoolean("enabled")) {
-                    count++;
+                    counter++;
                 }
             }
         }
 
-        return count;
+        return counter;
     }
 
 }

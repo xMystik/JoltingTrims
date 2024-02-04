@@ -1,12 +1,12 @@
 package me.skript.joltingtrims.data.filedata;
 
-import me.skript.joltingtrims.JoltingTrims;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
+import java.nio.file.Files;
 
 /*
  *
@@ -17,11 +17,11 @@ import java.io.*;
 
 public class ConfigFile<T extends Plugin> {
 
-    private T plugin;
-    private File file;
-    private FileConfiguration config;
-    private String fileAsName;
-    private String folderPath;
+    private final T plugin;
+    private final File file;
+    private final FileConfiguration config;
+    private final String fileAsName;
+    private final String folderPath;
 
     //----------------------------[ ConfigFiles Constructors Start ]----------------------------//
     //Used to create a config file on the default plugins path.
@@ -105,7 +105,7 @@ public class ConfigFile<T extends Plugin> {
     //Used to copy the default config from the jar into the plugin folder.
     public void copyDefaults(InputStream inputFile, File outputFile) {
         try {
-            OutputStream output = new FileOutputStream(outputFile);
+            OutputStream output = Files.newOutputStream(outputFile.toPath());
             byte[] buffer = new byte[1024];
             int length;
             while((length = inputFile.read(buffer)) > 0){

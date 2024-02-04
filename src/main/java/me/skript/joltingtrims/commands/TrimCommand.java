@@ -17,8 +17,8 @@ import java.util.List;
 
 public class TrimCommand implements CommandExecutor, TabCompleter {
 
-    private JoltingTrims plugin;
-    private DataManager dataManager;
+    private final JoltingTrims plugin;
+    private final DataManager dataManager;
     private final String cmd = "trim";
 
     public TrimCommand(JoltingTrims plugin) {

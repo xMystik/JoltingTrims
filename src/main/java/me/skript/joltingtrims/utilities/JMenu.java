@@ -20,13 +20,18 @@ public abstract class JMenu implements InventoryHolder {
 
     public abstract int getSize();
     public abstract String getTitle();
-    public abstract void setupLayout();
     public abstract void setupContents();
-    public abstract void handleClicks(InventoryClickEvent event);
+    public abstract void handleMenuClicks(InventoryClickEvent event);
+
+    public void cancelAllClicks(InventoryClickEvent event) {
+        if(event.getView().getTopInventory().getHolder() instanceof JMenu && event.getView().getBottomInventory().getHolder() instanceof Player) {
+            event.setCancelled(true);
+        }
+    }
 
     public void openMenu() {
         inventory = Bukkit.createInventory(this, getSize(), getTitle());
-        setupLayout();
+
         setupContents();
 
         owner.openInventory(inventory);

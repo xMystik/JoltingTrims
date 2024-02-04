@@ -15,8 +15,8 @@ import java.util.*;
 
 public class FilesManager<T extends Plugin> {
 
-    private T plugin;
-    private HashMap<String, ConfigFile<T>> filesMap = new HashMap<>();
+    private final T plugin;
+    private final HashMap<String, ConfigFile<T>> filesMap = new HashMap<>();
 
     //------------------------------[ Manager Constructors Start ]-----------------------------//
     //We're making the constructors that initializes the file manager.

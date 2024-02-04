@@ -9,13 +9,12 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 
 public class PlayerData {
 
-    private Player player;
+    private final Player player;
     private TrimMaterial material;
     private TrimPattern pattern;
     private TrimMaterial previousMaterial;
     private TrimPattern previousPattern;
     private ItemStack editingItem;
-
 
     public PlayerData(Player player, ItemStack editingItem, TrimMaterial material, TrimPattern pattern) {
         this.player = player;
