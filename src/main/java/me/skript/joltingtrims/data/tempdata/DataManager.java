@@ -27,7 +27,7 @@ public class DataManager {
             return managerMap.get(player.getUniqueId());
         }
         else {
-            PlayerData data = new PlayerData(player);
+            PlayerData data = new PlayerData(player.getUniqueId());
             managerMap.put(player.getUniqueId(), data);
             return data;
         }
