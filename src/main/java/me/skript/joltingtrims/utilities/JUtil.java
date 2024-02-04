@@ -1,6 +1,5 @@
 package me.skript.joltingtrims.utilities;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
 import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.utilities.enums.ToastType;
@@ -9,9 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,14 +21,10 @@ import java.util.List;
 public class JUtil {
 
     //------------------------------------------------------------------------------------\\
-    public static String format(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
-    }
-
-    public static String formatWithColorCodesAndHex(final String textToTranslate) {
+    public static String format(String message) {
         final char altColorChar = '&';
         final StringBuilder b = new StringBuilder();
-        final char[] mess = textToTranslate.toCharArray();
+        final char[] mess = message.toCharArray();
         boolean color = false, hashtag = false, doubleTag = false;
         char tmp; // Used in loops
 
@@ -178,6 +171,7 @@ public class JUtil {
                 }
 
         return b.toString();
+        //return ChatColor.translateAlternateColorCodes('&', text);
     }
     //------------------------------------------------------------------------------------\\
 
@@ -519,30 +513,6 @@ public class JUtil {
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.removeEnchant(Enchantment.PROTECTION_ENVIRONMENTAL); // Change the enchantment type if needed
         item.setItemMeta(itemMeta);
-    }
-
-    public static void lockInventory(InventoryClickEvent event) {
-        if(event.getClickedInventory() == null || event.getCurrentItem() == null) {
-            return;
-        }
-
-        InventoryHolder holder = event.getClickedInventory().getHolder();
-
-        if(holder instanceof JMenu || holder instanceof Player) {
-            event.setCancelled(true);
-        }
-    }
-
-    public static void lockInventory(InventoryClickEvent event, Inventory inventory) {
-        if(event.getClickedInventory() == null || event.getCurrentItem() == null) {
-            return;
-        }
-
-        InventoryHolder holder = event.getClickedInventory().getHolder();
-
-        if(inventory.getHolder() instanceof Player || inventory.getHolder() instanceof JMenu) {
-            event.setCancelled(true);
-        }
     }
 
 }
