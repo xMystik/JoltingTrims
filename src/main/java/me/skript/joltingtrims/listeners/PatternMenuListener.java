@@ -4,6 +4,7 @@ import me.skript.joltingtrims.data.tempdata.DataManager;
 import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.menus.GeneralMenu;
+import me.skript.joltingtrims.menus.PatternMenu;
 import me.skript.joltingtrims.utilities.enums.ItemType;
 import me.skript.joltingtrims.utilities.JUtil;
 import me.skript.joltingtrims.utilities.JTrimFactory;
@@ -14,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,8 +22,8 @@ import java.util.List;
 
 public class PatternMenuListener implements Listener {
 
-    private JoltingTrims plugin;
-    private DataManager dataManager;
+    private final JoltingTrims plugin;
+    private final DataManager dataManager;
 
     public PatternMenuListener(JoltingTrims plugin) {
         this.plugin = plugin;
@@ -34,21 +34,38 @@ public class PatternMenuListener implements Listener {
 
     @EventHandler
     public void onPatternMenuClick(InventoryClickEvent event) {
-        ItemStack clickedItem = event.getCurrentItem();
-        Player player = (Player) event.getWhoClicked();
-
-        if(!(event.getClickedInventory() != null && clickedItem != null && event.getClickedInventory().getType() != InventoryType.CREATIVE
-                && event.getView().getTitle().equals(JUtil.format(plugin.getPatternMenuFile().getString("menu-title"))))) {
+        if (event.getClickedInventory() == null || event.getCurrentItem() == null || !(event.getWhoClicked() instanceof Player)) {
             return;
         }
 
-        event.setCancelled(true);
+        ItemStack clickedItem = event.getCurrentItem();
+        Player player = (Player) event.getWhoClicked();
 
-        // Handle the Layout Item clicks
-        handleLayoutItemClick(player, clickedItem);
+        if(event.getView().getTopInventory().getHolder() instanceof PatternMenu && event.getView().getBottomInventory().getHolder() instanceof Player) {
+            event.setCancelled(true);
 
-        // Handle the Pattern Item clicks
-        handlePatternItemClick(player, clickedItem, event);
+            // Handle the Layout Item clicks
+            handleLayoutItemClick(player, clickedItem);
+
+            // Handle the Pattern Item clicks
+            handlePatternItemClick(player, clickedItem, event);
+        }
+    }
+
+    @EventHandler
+    public void onPatternMenuClose(InventoryCloseEvent event) {
+        Player player = (Player) event.getPlayer();
+
+        if(event.getInventory().getHolder() instanceof PatternMenu) {
+
+            if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
+                if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
+                    player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
+                }
+                dataManager.clearPlayerData(player);
+            }
+
+        }
     }
 
     private void handleLayoutItemClick(Player player, ItemStack clickedItem) {
@@ -76,7 +93,7 @@ public class PatternMenuListener implements Listener {
                             JUtil.playSound(player, plugin.getPatternMenuFile().getString("button-click-sound"));
                         }
                         else if(type.equals(ItemType.CLEAR_PATTERN.getString())) {
-                            JTrimFactory.resetPattern(dataManager.getOrCreatePlayerData(player));
+                            JTrimFactory.resetArmorPattern(dataManager.getOrCreatePlayerData(player));
                             JUtil.playSound(player, plugin.getPatternMenuFile().getString("clear-pattern-sound"));
                         }
                     }
@@ -152,19 +169,6 @@ public class PatternMenuListener implements Listener {
                 player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-material")));
                 JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-locked-sound"));
             }
-        }
-    }
-
-    @EventHandler
-    public void onPatternMenuClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-
-        // TODO - CHECK FOR ArrayIndexOutOfBoundsException
-        if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-            if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
-                player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
-            }
-            dataManager.clearPlayerData(player);
         }
     }
 }

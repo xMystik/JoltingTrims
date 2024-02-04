@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class SmithingTableListener implements Listener {
 
-    private JoltingTrims plugin;
+    private final JoltingTrims plugin;
 
     public SmithingTableListener(JoltingTrims plugin) {
         this.plugin = plugin;

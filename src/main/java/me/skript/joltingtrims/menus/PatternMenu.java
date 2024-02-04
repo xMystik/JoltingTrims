@@ -4,36 +4,54 @@ import me.skript.joltingtrims.data.tempdata.DataManager;
 import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.utilities.JItemBuilder;
+import me.skript.joltingtrims.utilities.JMenu;
 import me.skript.joltingtrims.utilities.JUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 
 import java.util.List;
 
-public class PatternMenu {
+public class PatternMenu extends JMenu {
 
-    private JoltingTrims plugin = JoltingTrims.getInstance();
+    private final JoltingTrims plugin = JoltingTrims.getInstance();
     private final DataManager dataManager = plugin.getDataManager();
 
-    public void openMenu(Player player) {
-        Inventory inv = Bukkit.createInventory(player, plugin.getPatternMenuFile().getInt("menu-size"), JUtil.format(plugin.getPatternMenuFile().getString("menu-title")));
+    public PatternMenu(Player owner) {
+        super(owner);
+    }
 
+    @Override
+    public int getSize() {
+        if(plugin.getPatternMenuFile().getInt("menu-size") > 54 || plugin.getPatternMenuFile().getInt("menu-size") < 9) {
+            return 54;
+        }
+        else {
+            return plugin.getPatternMenuFile().getInt("menu-size");
+        }
+    }
+
+    @Override
+    public String getTitle() {
+        return JUtil.format(plugin.getPatternMenuFile().getString("menu-title"));
+    }
+
+    @Override
+    public void setupContents() {
         ConfigurationSection layoutSection = plugin.getPatternMenuFile().getConfigurationSection("Layout");
 
-        JUtil.setupInventoryLayout(layoutSection, inv);
+        JUtil.setupInventoryLayout(layoutSection, getInventory(), getOwner());
 
         ConfigurationSection patternsSection = plugin.getConfigurationFile().getConfigurationSection("Patterns");
 
         if (patternsSection != null) {
 
-            PlayerData playerData = dataManager.getOrCreatePlayerData(player);
+            PlayerData playerData = dataManager.getOrCreatePlayerData(getOwner());
             TrimPattern selectedTrimPattern = playerData.getTrimPattern();
 
             for (String patName : patternsSection.getKeys(false)) {
@@ -49,7 +67,7 @@ public class PatternMenu {
                             String loreLine = itemLore.get(i);
 
                             if(loreLine.contains("%PERMISSION%")) {
-                                boolean hasPerm = player.hasPermission(patSection.getString("permission"));
+                                boolean hasPerm = getOwner().hasPermission(patSection.getString("permission"));
                                 loreLine = loreLine.replace("%PERMISSION%", hasPerm ? plugin.getPatternMenuFile().getString("pattern-unlocked") : plugin.getPatternMenuFile().getString("pattern-locked"));
                                 itemLore.set(i, loreLine);
                             }
@@ -69,13 +87,15 @@ public class PatternMenu {
                         }
 
                         // Add the trim item to the GUI
-                        inv.addItem(patItem);
+                        getInventory().addItem(patItem);
                     }
                 }
             }
         }
-
-        player.openInventory(inv);
     }
 
+    @Override
+    public void handleMenuClicks(InventoryClickEvent event) {
+
+    }
 }

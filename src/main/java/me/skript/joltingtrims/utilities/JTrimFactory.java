@@ -1,6 +1,5 @@
 package me.skript.joltingtrims.utilities;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
 import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import org.bukkit.Sound;
@@ -12,12 +11,11 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 
 public class JTrimFactory {
 
-    private static JoltingTrims plugin = JoltingTrims.getInstance();
-    private static final DataManager dataManager = plugin.getDataManager();
+    private final static JoltingTrims plugin = JoltingTrims.getInstance();
 
     public static ItemStack setupItem(PlayerData playerData) {
         // Get the editing item
-        ItemStack tempItem = dataManager.getOrCreatePlayerData(playerData.getPlayer()).getEditingItem().clone();
+        ItemStack tempItem = plugin.getDataManager().getOrCreatePlayerData(playerData.getPlayer()).getEditingItem().clone();
         ArmorTrim tempTrim;
         Player player = playerData.getPlayer();
 
@@ -115,14 +113,14 @@ public class JTrimFactory {
             }
         }
 
-        dataManager.clearPlayerData(player);
+        plugin.getDataManager().clearPlayerData(player);
         player.closeInventory();
         return tempItem;
     }
 
-    public static void resetPattern(PlayerData playerData) {
-        if(dataManager.getOrCreatePlayerData(playerData.getPlayer()).getEditingItem() != null) {
-            ItemStack tempItem = dataManager.getOrCreatePlayerData(playerData.getPlayer()).getEditingItem().clone();
+    public static void resetArmorPattern(PlayerData playerData) {
+        if(plugin.getDataManager().getOrCreatePlayerData(playerData.getPlayer()).getEditingItem() != null) {
+            ItemStack tempItem = plugin.getDataManager().getOrCreatePlayerData(playerData.getPlayer()).getEditingItem().clone();
 
             if(playerData.getEditingItem() != null) {
 

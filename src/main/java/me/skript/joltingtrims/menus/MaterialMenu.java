@@ -4,36 +4,54 @@ import me.skript.joltingtrims.data.tempdata.DataManager;
 import me.skript.joltingtrims.data.tempdata.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.utilities.JItemBuilder;
+import me.skript.joltingtrims.utilities.JMenu;
 import me.skript.joltingtrims.utilities.JUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 
 import java.util.List;
 
-public class MaterialMenu {
+public class MaterialMenu extends JMenu {
 
-    private JoltingTrims plugin = JoltingTrims.getInstance();
+    private final JoltingTrims plugin = JoltingTrims.getInstance();
     private final DataManager dataManager = plugin.getDataManager();
 
-    public void openMenu(Player player) {
-        Inventory inv = Bukkit.createInventory(player, plugin.getMaterialMenuFile().getInt("menu-size"), JUtil.format(plugin.getMaterialMenuFile().getString("menu-title")));
+    public MaterialMenu(Player owner) {
+        super(owner);
+    }
 
+    @Override
+    public int getSize() {
+        if(plugin.getMaterialMenuFile().getInt("menu-size") > 54 || plugin.getMaterialMenuFile().getInt("menu-size") < 9) {
+            return 54;
+        }
+        else {
+            return plugin.getMaterialMenuFile().getInt("menu-size");
+        }
+    }
+
+    @Override
+    public String getTitle() {
+        return JUtil.format(plugin.getMaterialMenuFile().getString("menu-title"));
+    }
+
+    @Override
+    public void setupContents() {
         ConfigurationSection layoutSection = plugin.getMaterialMenuFile().getConfigurationSection("Layout");
 
-        JUtil.setupInventoryLayout(layoutSection, inv);
+        JUtil.setupInventoryLayout(layoutSection, getInventory());
 
         ConfigurationSection materialSection = plugin.getConfigurationFile().getConfigurationSection("Materials");
 
         if (materialSection != null) {
 
-            PlayerData playerData = dataManager.getOrCreatePlayerData(player);
+            PlayerData playerData = dataManager.getOrCreatePlayerData(getOwner());
             TrimMaterial selectedTrimMaterial = playerData.getTrimMaterial();
 
             for (String matName : materialSection.getKeys(false)) {
@@ -48,7 +66,7 @@ public class MaterialMenu {
                             String loreLine = itemLore.get(i);
 
                             if(loreLine.contains("%PERMISSION%")) {
-                                boolean hasPerm = player.hasPermission(matSection.getString("permission"));
+                                boolean hasPerm = getOwner().hasPermission(matSection.getString("permission"));
                                 loreLine = loreLine.replace("%PERMISSION%", hasPerm ? plugin.getMaterialMenuFile().getString("material-unlocked") : plugin.getMaterialMenuFile().getString("material-locked"));
                                 itemLore.set(i, loreLine);
                             }
@@ -68,12 +86,14 @@ public class MaterialMenu {
                         }
 
                         // Adds the material item to the GUI
-                        inv.addItem(matItem);
+                        getInventory().addItem(matItem);
                     }
                 }
             }
         }
+    }
 
-        player.openInventory(inv);
+    @Override
+    public void handleMenuClicks(InventoryClickEvent event) {
     }
 }

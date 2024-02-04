@@ -32,46 +32,39 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if(command.getName().equalsIgnoreCase(cmd)) {
+        if (sender instanceof Player) {
 
-            if (sender instanceof Player) {
+            Player player = (Player) sender;
 
-                Player player = (Player) sender;
-
-                if (args.length == 1) {
-                    if (args[0].equalsIgnoreCase("menu")) {
-                        if ((sender.hasPermission("joltingtrims.menu") && plugin.getConfigurationFile().getBoolean("trim-command")) || sender.isOp()) {
-                            new GeneralMenu(player).openMenu();
-                        }
-                        else {
-                            player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
-                        }
-                        return true;
-                    }
-                    else if (args[0].equalsIgnoreCase("reload")) {
-                        if (sender.hasPermission("joltingtrims.reload") || sender.isOp()) {
-                            dataManager.startReloading();
-                            dataManager.closeAllMenus();
-                            plugin.reloadConfigurationFile();
-                            plugin.reloadGeneralMenuFile();
-                            plugin.reloadMessagesFile();
-                            plugin.reloadPatternMenuFile();
-                            plugin.reloadMaterialMenuFile();
-                            player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("files-reload")));
-                        }
-                        else {
-                            player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
-                        }
-                        return true;
-                    }
-                    else if(args[0].equalsIgnoreCase("version")) {
-                        player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version: &e&l1.0.4"));
-                        return true;
+            if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("menu")) {
+                    if ((sender.hasPermission("joltingtrims.menu") && plugin.getConfigurationFile().getBoolean("trim-command")) || sender.isOp()) {
+                        new GeneralMenu(player).openMenu();
                     }
                     else {
-                        player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("command-usage")));
-                        return true;
+                        player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
                     }
+                    return true;
+                }
+                else if (args[0].equalsIgnoreCase("reload")) {
+                    if (sender.hasPermission("joltingtrims.reload") || sender.isOp()) {
+                        dataManager.startReloading();
+                        dataManager.closeAllMenus();
+                        plugin.reloadConfigurationFile();
+                        plugin.reloadGeneralMenuFile();
+                        plugin.reloadMessagesFile();
+                        plugin.reloadPatternMenuFile();
+                        plugin.reloadMaterialMenuFile();
+                        player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("files-reload")));
+                    }
+                    else {
+                        player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-command")));
+                    }
+                    return true;
+                }
+                else if(args[0].equalsIgnoreCase("version")) {
+                    player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version: &e&l" + plugin.getPluginMeta().getVersion()));
+                    return true;
                 }
                 else {
                     player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("command-usage")));
@@ -79,12 +72,15 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                 }
             }
             else {
-                sender.sendMessage(JUtil.format(plugin.getMessagesFile().getString("only-players")));
+                player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("command-usage")));
                 return true;
             }
         }
+        else {
+            sender.sendMessage(JUtil.format(plugin.getMessagesFile().getString("only-players")));
+            return true;
+        }
 
-        return true;
     }
 
     @Override
