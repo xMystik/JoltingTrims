@@ -28,7 +28,7 @@ public final class JoltingTrims extends JavaPlugin {
     public void onEnable() {
 
         if(!Bukkit.getServer().getVersion().contains(REQUIRED_VERSION)) {
-            Bukkit.getConsoleSender().sendMessage(JUtil.format("&3&l[JoltingTrims] &7Server version is not supported."));
+            Bukkit.getConsoleSender().sendMessage(JUtil.format("&4&l[JoltingTrims] &7Server version is not supported."));
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
@@ -51,6 +51,7 @@ public final class JoltingTrims extends JavaPlugin {
         new PatternMenuListener(this);
         new SmithingTableListener(this);
 
+        Bukkit.getConsoleSender().sendMessage(JUtil.format("&3&l[JoltingTrims] &7The plugin has been enabled!"));
     }
 
     @Override

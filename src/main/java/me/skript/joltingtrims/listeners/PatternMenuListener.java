@@ -54,9 +54,9 @@ public class PatternMenuListener implements Listener {
 
     @EventHandler
     public void onPatternMenuClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-
         if(event.getInventory().getHolder() instanceof PatternMenu) {
+
+            Player player = (Player) event.getPlayer();
 
             if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
                 if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {

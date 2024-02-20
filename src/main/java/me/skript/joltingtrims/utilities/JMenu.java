@@ -7,15 +7,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public abstract class JMenu implements InventoryHolder {
 
-    protected Player owner;
+    protected UUID owner;
     protected Inventory inventory;
     protected String title;
     protected int size;
 
     public JMenu(Player owner) {
-        this.owner = owner;
+        this.owner = owner.getUniqueId();
     }
 
     public abstract int getSize();
@@ -34,7 +36,7 @@ public abstract class JMenu implements InventoryHolder {
 
         setupContents();
 
-        owner.openInventory(inventory);
+        Bukkit.getPlayer(owner).openInventory(inventory);
     }
 
     @Override
@@ -43,6 +45,6 @@ public abstract class JMenu implements InventoryHolder {
     }
 
     public Player getOwner() {
-        return owner;
+        return Bukkit.getPlayer(owner);
     }
 }

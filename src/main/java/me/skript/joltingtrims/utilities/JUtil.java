@@ -171,7 +171,6 @@ public class JUtil {
                 }
 
         return b.toString();
-        //return ChatColor.translateAlternateColorCodes('&', text);
     }
     //------------------------------------------------------------------------------------\\
 

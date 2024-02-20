@@ -53,9 +53,9 @@ public class MaterialMenuListener implements Listener {
 
     @EventHandler
     public void onMaterialMenuClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-
         if(event.getInventory().getHolder() instanceof MaterialMenu) {
+
+            Player player = (Player) event.getPlayer();
 
             if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
                 if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {

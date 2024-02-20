@@ -69,10 +69,11 @@ public class GeneralMenuListener implements Listener {
     @EventHandler
     public void onGeneralMenuClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
-        Player player = (Player) event.getPlayer();
-        ItemStack editItem = event.getInventory().getItem(plugin.getGeneralMenuFile().getInt("item-slot"));
 
         if(inventory.getHolder() instanceof GeneralMenu) {
+
+            Player player = (Player) event.getPlayer();
+            ItemStack editItem = event.getInventory().getItem(plugin.getGeneralMenuFile().getInt("item-slot"));
 
             // Check if InventoryClose was caused to open a new Inventory
             if(event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
