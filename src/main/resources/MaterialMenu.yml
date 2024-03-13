@@ -5,7 +5,7 @@
 #########################################################
 
 # GUI Title
-menu-title: '&8&lMaterial Menu'
+menu-title: '&3&lMaterial Menu'
 
 # GUI Size
 menu-size: 45
@@ -13,19 +13,19 @@ menu-size: 45
 # Configuration of any Material Item shown in the GUI
 materials-name: '&e&l%MATERIAL%'
 materials-lore:
-  - '&e• &7Unlocked %PERMISSION%'
+  - '&e• &7Status %PERMISSION%'
 
 # The lore results if the player has the permission or not
-material-locked: '&c&lNo'
-material-unlocked: '&a&lYes'
+material-locked: '&c&lLocked'
+material-unlocked: '&a&lUnlocked'
 
-# The sounds played whenever a player clicks on a locker or unlocked item
+# The sounds played whenever a player clicks on a locked or unlocked item
 # Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-material-locked-sound: BLOCK_ANVIL_LAND
+material-locked-sound: BLOCK_DISPENSER_FAIL
 material-unlocked-sound: ENTITY_EXPERIENCE_ORB_PICKUP
 
 # Sound that will be played when player clicks on any button item
-button-click-sound: ITEM_BOOK_PAGE_TURN
+button-click-sound: UI_BUTTON_CLICK
 
 # Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
 # Available Types: FILLER, GENERAL_MENU_OPENER
@@ -85,6 +85,6 @@ Layout:
     material: IRON_DOOR
     name: '&c&lBack'
     lore:
-      - '&7Click here to go on the previous menu!'
+      - '&e(Click here to move to the previous menu)'
     slots:
       - 4

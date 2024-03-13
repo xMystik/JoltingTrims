@@ -11,7 +11,7 @@ select-mat-and-pat: "&4&l(!) &7You have to select both a material and a pattern 
 select-material: "&4&l(!) &7You have to select a material before you proceed!"
 select-pattern: "&4&l(!) &7You have to select a pattern before you proceed!"
 only-players: "&7Only players are allowed to run this command!"
-command-usage: "&e&l(!) &7Usage: &e/trim &6<menu/reload/version>&7!"
+command-usage: "&e&l(!) &7Usage &e/trim &6<menu/reload/version>&7!"
 files-reload: "&3&l(!) &7All configuration files have been reloaded!"
 no-permission-material: "&4&l(!) &7You do not have access to use this material!"
 no-permission-pattern: "&4&l(!) &7You do not have access to use this pattern!"

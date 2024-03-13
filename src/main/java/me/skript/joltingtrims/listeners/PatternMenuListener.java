@@ -8,6 +8,7 @@ import me.skript.joltingtrims.menus.PatternMenu;
 import me.skript.joltingtrims.utilities.enums.ItemType;
 import me.skript.joltingtrims.utilities.JUtil;
 import me.skript.joltingtrims.utilities.JTrimFactory;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -90,11 +91,11 @@ public class PatternMenuListener implements Listener {
                     if (JUtil.isValidItemSection(materialName, slots) && JUtil.isConfigItem(clickedItem, itemSection)) {
                         if(type.equals(ItemType.GENERAL_MENU_OPENER.getString())) {
                             new GeneralMenu(player).openMenu();
-                            JUtil.playSound(player, plugin.getPatternMenuFile().getString("button-click-sound"));
+                            JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("button-click-sound")), 0.5f, 1.0f);
                         }
                         else if(type.equals(ItemType.CLEAR_PATTERN.getString())) {
                             JTrimFactory.resetArmorPattern(dataManager.getOrCreatePlayerData(player));
-                            JUtil.playSound(player, plugin.getPatternMenuFile().getString("clear-pattern-sound"));
+                            JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("clear-pattern-sound")), 1.0f, 1.5f);
                         }
                     }
                 }
@@ -155,7 +156,7 @@ public class PatternMenuListener implements Listener {
 
                 // Set the new TrimPattern as the pattern that the player clicked
                 playerData.setTrimPattern(clickedItem.getType());
-                JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-unlocked-sound"));
+                JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("pattern-unlocked-sound")), 1.0f, 1.5f);
 
                 // Add an enchantment to make the item glow
                 patItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -167,7 +168,7 @@ public class PatternMenuListener implements Listener {
             // If player does not have permission to use that Material
             else {
                 player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-material")));
-                JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-locked-sound"));
+                JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("pattern-locked-sound")), 1.0f, 0.5f);
             }
         }
     }

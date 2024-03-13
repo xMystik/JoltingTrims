@@ -371,9 +371,15 @@ public class JUtil {
         }
     }
 
+    public static void playSound(Player player, Sound sound, Float volume, Float pitch) {
+        if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("sounds-enabled")) {
+            player.playSound(player, sound, volume, pitch);
+        }
+    }
+
     public static void showToast(Player player) {
         if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("toast-enabled")) {
-            JToast.showTo(player, ToastType.GOAL, "smithing_table", "Successfully finished|the trimming process!");
+            JToast.showTo(player, ToastType.TASK, "smithing_table", "Successfully finished|the trimming process!");
         }
     }
     //------------------------------------------------------------------------------------\\

@@ -7,6 +7,7 @@ import me.skript.joltingtrims.menus.GeneralMenu;
 import me.skript.joltingtrims.menus.MaterialMenu;
 import me.skript.joltingtrims.utilities.*;
 import me.skript.joltingtrims.utilities.enums.ItemType;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -70,6 +71,7 @@ public class MaterialMenuListener implements Listener {
     private void handleLayoutItemClick(Player player, ItemStack clickedItem) {
         // Get the Layout section
         ConfigurationSection layoutSection = plugin.getMaterialMenuFile().getConfigurationSection("Layout");
+        Sound buttonSound = Sound.valueOf(plugin.getMaterialMenuFile().getString("button-click-sound"));
 
         // Check if it exists
         if (layoutSection != null) {
@@ -89,7 +91,7 @@ public class MaterialMenuListener implements Listener {
                     if (JUtil.isValidItemSection(materialName, slots) && JUtil.isConfigItem(clickedItem, itemSection)) {
                         if (type.equals(ItemType.GENERAL_MENU_OPENER.getString())) {
                             new GeneralMenu(player).openMenu();
-                            JUtil.playSound(player, plugin.getMaterialMenuFile().getString("button-click-sound"));
+                            JUtil.playSound(player, buttonSound, 0.5f, 1.0f);
                         }
                     }
                 }
@@ -150,7 +152,7 @@ public class MaterialMenuListener implements Listener {
 
                 // Set the new TrimMaterial as the material that the player clicked
                 playerData.setTrimMaterial(clickedItem.getType());
-                JUtil.playSound(player, plugin.getMaterialMenuFile().getString("material-unlocked-sound"));
+                JUtil.playSound(player, Sound.valueOf(plugin.getMaterialMenuFile().getString("material-unlocked-sound")), 1.0f, 2.0f);
 
                 // Add an enchantment to make the item glow
                 matItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
@@ -162,7 +164,7 @@ public class MaterialMenuListener implements Listener {
             // If player does not have permission to use that Material
             else {
                 player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-material")));
-                JUtil.playSound(player, plugin.getMaterialMenuFile().getString("material-locked-sound"));
+                JUtil.playSound(player, Sound.valueOf(plugin.getMaterialMenuFile().getString("material-locked-sound")), 1.0f, 0.5f);
             }
         }
     }

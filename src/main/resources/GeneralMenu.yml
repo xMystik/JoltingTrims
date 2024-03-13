@@ -5,7 +5,7 @@
 #########################################################
 
 # GUI Title
-menu-title: '&8&lTrimming Menu'
+menu-title: '&3&lTrimming Menu'
 
 # GUI Size
 menu-size: 36
@@ -15,8 +15,8 @@ item-slot: 4
 
 # The sounds played whenever a player clicks on a button item on the menu
 # Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-button-click-sound: ITEM_BOOK_PAGE_TURN
-apply-changes-success-sound: ENTITY_PLAYER_LEVELUP
+button-click-sound: UI_BUTTON_CLICK
+apply-changes-success-sound: ENTITY_EXPERIENCE_ORB_PICKUP
 apply-changes-failure-sound: BLOCK_DISPENSER_FAIL
 
 # Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
@@ -83,24 +83,24 @@ Layout:
     type: MATERIAL_MENU_OPENER
     material: QUARTZ
     model: 0
-    name: '&e&lMaterial Menu'
+    name: '&3&lMaterial Menu'
     lore:
-      - '&7Unlocked Materials &8- &e%UNLOCKED_MATERIALS%&8/&e%MAX_MATERIALS%'
-      - '&7Currently Selected &8- &e%SELECTED_MATERIAL%'
+      - '&e&l• &7Unlocked Materials &e%UNLOCKED_MATERIALS%&8/&6%MAX_MATERIALS%'
+      - '&e&l• &7Currently Selected &e%SELECTED_MATERIAL%'
       - '&7'
-      - '&7Click here to select a material!'
+      - '&e(Click here to select a material)'
     slots:
       - 20
   Pattern-Menu-Item:
     type: PATTERN_MENU_OPENER
     material: VEX_ARMOR_TRIM_SMITHING_TEMPLATE
     model: 0
-    name: '&e&lPattern Menu'
+    name: '&3&lPattern Menu'
     lore:
-      - '&7Unlocked Patterns &8- &e%UNLOCKED_PATTERNS%&8/&e%MAX_PATTERNS%'
-      - '&7Currently Selected &8- &e%SELECTED_PATTERN%'
+      - '&e&l• &7Unlocked Patterns &e%UNLOCKED_PATTERNS%&8/&6%MAX_PATTERNS%'
+      - '&e&l• &7Currently Selected &e%SELECTED_PATTERN%'
       - '&7'
-      - '&7Click here to select a pattern!'
+      - '&e(Click here to select a pattern)'
     slots:
       - 24
   Finalize-Menu-Item:
@@ -109,9 +109,9 @@ Layout:
     model: 0
     name: '&a&lApply Changes'
     lore:
-      - '&7Selected Pattern &8- &e%SELECTED_PATTERN%'
-      - '&7Selected Material &8- &e%SELECTED_MATERIAL%'
+      - '&e&l• &7Selected Pattern &6%SELECTED_PATTERN%'
+      - '&e&l• &7Selected Material &6%SELECTED_MATERIAL%'
       - '&7'
-      - '&7Click here to apply the changes!'
+      - '&e(Click here to apply the changes)'
     slots:
       - 22

@@ -5,7 +5,7 @@
 #########################################################
 
 # GUI Title
-menu-title: '&8&lPattern Menu'
+menu-title: '&3&lPattern Menu'
 
 # GUI Size
 menu-size: 54
@@ -13,20 +13,20 @@ menu-size: 54
 # Configuration of any Pattern Item shown in the GUI
 patterns-name: '&e&l%PATTERN%'
 patterns-lore:
-  - '&e• &7Unlocked %PERMISSION%'
+  - '&e• &7Status %PERMISSION%'
 
 # The lore results if the player has the permission or not
-pattern-locked: '&c&lNo'
-pattern-unlocked: '&a&lYes'
+pattern-locked: '&c&lLocked'
+pattern-unlocked: '&a&lUnlocked'
 
-# The sounds played whenever a player clicks on a locker or unlocked item
+# The sounds played whenever a player clicks on a locked or unlocked item
 # Sound types can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-pattern-locked-sound: BLOCK_ANVIL_LAND
+pattern-locked-sound: BLOCK_DISPENSER_FAIL
 pattern-unlocked-sound: ENTITY_EXPERIENCE_ORB_PICKUP
 # Sound that will be played when player clicks on any button item
-button-click-sound: ITEM_BOOK_PAGE_TURN
+button-click-sound: UI_BUTTON_CLICK
 # Sound that will be played when player clicks on the clear pattern item
-clear-pattern-sound: ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM
+clear-pattern-sound: ENTITY_ITEM_FRAME_REMOVE_ITEM
 
 # Adjust this section to change the GUI to your liking. Be sure to follow the principles shown below
 # Available Types: FILLER, CLEAR_PATTERN, GENERAL_MENU_OPENER
@@ -85,9 +85,9 @@ Layout:
   Clear-Item-1:
     type: CLEAR_PATTERN
     material: BARRIER
-    name: '&e&lClear Armor Pattern'
+    name: '&4&lClear Armor Pattern'
     lore:
-      - '&7Click here to clear current pattern!'
+      - '&e(Click here to clear current pattern)'
     slots:
       - 40
   Back-Item-1:
@@ -95,6 +95,6 @@ Layout:
     material: IRON_DOOR
     name: '&c&lBack'
     lore:
-      - '&7Click here to go on the previous menu!'
+      - '&e(Click here to move to the previous menu)'
     slots:
       - 4
