@@ -19,7 +19,7 @@ public class ConfigFile<T extends Plugin> {
 
     private final T plugin;
     private final File file;
-    private final FileConfiguration config;
+    private FileConfiguration config;
     private final String fileAsName;
     private final String folderPath;
 
@@ -122,8 +122,9 @@ public class ConfigFile<T extends Plugin> {
     private void setupConfig() {
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            copyDefaults(plugin.getResource(file.getName()), file);
+            copyDefaults(plugin.getResource(fileAsName + ".yml"), file);
         }
+        config = YamlConfiguration.loadConfiguration(file);
     }
     //-------------------------------[ ConfigFiles Methods End ]--------------------------------//
 }
