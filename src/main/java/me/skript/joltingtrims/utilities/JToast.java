@@ -37,34 +37,70 @@ public class JToast {
     }
 
     private void createAdvancement() {
-        Bukkit.getUnsafe().loadAdvancement(key, "{\n" +
-                "    \"criteria\": {\n" +
-                "        \"trigger\": {\n" +
-                "            \"trigger\": \"minecraft:impossible\"\n" +
-                "        }\n" +
-                "    },\n" +
-                "    \"display\": {\n" +
-                "        \"icon\": {\n" +
-                "            \"item\": \"minecraft:" + icon.toLowerCase() + "\"\n" +
-                "        },\n" +
-                "        \"title\": {\n" +
-                "            \"text\": \"" + message.replace("|", "\n") + "\"\n" +
-                "        },\n" +
-                "        \"description\": {\n" +
-                "            \"text\": \"\"\n" +
-                "        },\n" +
-                "        \"background\": \"minecraft:textures/gui/advancements/backgrounds/adventure.png\",\n" +
-                "        \"frame\": \"" + type.toString().toLowerCase() + "\",\n" +
-                "        \"announce_to_chat\": false,\n" +
-                "        \"show_toast\": true,\n" +
-                "        \"hidden\": true\n" +
-                "    },\n" +
-                "    \"requirements\": [\n" +
-                "        [\n" +
-                "            \"trigger\"\n" +
-                "        ]\n" +
-                "    ]\n" +
-                "}");
+        if(plugin.getServer().getVersion().contains("1.21")) {
+
+            String advancementJson = "{\n" +
+                    "    \"display\": {\n" +
+                    "        \"icon\": {\n" +
+                    "            \"id\": \"minecraft:" + icon.toLowerCase() + "\",\n" +
+                    "            \"count\": 1\n" +
+                    "        },\n" +
+                    "        \"title\": {\n" +
+                    "            \"text\": \"" + message.replace("|", "\\n") + "\"\n" +
+                    "        },\n" +
+                    "        \"description\": {\n" +
+                    "            \"text\": \"\"\n" +
+                    "        },\n" +
+                    "        \"background\": \"minecraft:textures/gui/advancements/backgrounds/adventure.png\",\n" +
+                    "        \"frame\": \"" + type.toString().toLowerCase() + "\",\n" +
+                    "        \"show_toast\": true,\n" +
+                    "        \"announce_to_chat\": false,\n" +
+                    "        \"hidden\": true\n" +
+                    "    },\n" +
+                    "    \"criteria\": {\n" +
+                    "        \"trigger\": {\n" +
+                    "            \"trigger\": \"minecraft:impossible\"\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}";
+
+            try {
+                Bukkit.getUnsafe().loadAdvancement(key, advancementJson);
+                System.out.println("Advancement loaded successfully: " + advancementJson);
+            } catch (Exception e) {
+                System.out.println("Error loading advancement: " + e.getMessage());
+            }
+
+        } else {
+            Bukkit.getUnsafe().loadAdvancement(key, "{\n" +
+                    "    \"criteria\": {\n" +
+                    "        \"trigger\": {\n" +
+                    "            \"trigger\": \"minecraft:impossible\"\n" +
+                    "        }\n" +
+                    "    },\n" +
+                    "    \"display\": {\n" +
+                    "        \"icon\": {\n" +
+                    "            \"item\": \"minecraft:" + icon.toLowerCase() + "\"\n" +
+                    "        },\n" +
+                    "        \"title\": {\n" +
+                    "            \"text\": \"" + message.replace("|", "\n") + "\"\n" +
+                    "        },\n" +
+                    "        \"description\": {\n" +
+                    "            \"text\": \"\"\n" +
+                    "        },\n" +
+                    "        \"background\": \"minecraft:textures/gui/advancements/backgrounds/adventure.png\",\n" +
+                    "        \"frame\": \"" + type.toString().toLowerCase() + "\",\n" +
+                    "        \"announce_to_chat\": false,\n" +
+                    "        \"show_toast\": true,\n" +
+                    "        \"hidden\": true\n" +
+                    "    },\n" +
+                    "    \"requirements\": [\n" +
+                    "        [\n" +
+                    "            \"trigger\"\n" +
+                    "        ]\n" +
+                    "    ]\n" +
+                    "}");
+        }
     }
 
     private void grantAdvancement(Player player) {
