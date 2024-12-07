@@ -9,7 +9,7 @@ public enum ItemType {
     CLEAR_PATTERN("CLEAR_PATTERN"),
     FINALIZE_CHANGES("FINALIZE_CHANGES");
 
-    private String type;
+    private final String type;
 
     ItemType(String type) {
         this.type = type;

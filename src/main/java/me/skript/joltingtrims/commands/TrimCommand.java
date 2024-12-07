@@ -19,14 +19,12 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
 
     private final JoltingTrims plugin;
     private final DataManager dataManager;
-    private final String cmd = "trim";
 
     public TrimCommand(JoltingTrims plugin) {
         this.plugin = plugin;
-
         this.dataManager = plugin.getDataManager();
 
-        plugin.getCommand(cmd).setExecutor(this);
+        plugin.getCommand("trim").setExecutor(this);
     }
 
     @Override

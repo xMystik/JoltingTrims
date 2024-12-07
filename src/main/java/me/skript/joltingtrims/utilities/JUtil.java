@@ -95,10 +95,12 @@ public class JUtil {
                 line = line.replace("%UNLOCKED_PATTERNS%", String.valueOf(JoltingTrims.getInstance().getDataManager().getUnlockedTrimPatterns(playerData.getPlayer())));
             }
             if(line.contains("%SELECTED_MATERIAL%")) {
-                line = line.replace("%SELECTED_MATERIAL%", playerData.getTrimMaterial() != null ? capitalizeWords(playerData.getTrimMaterial().getKey().getKey()) : "None");
+                //line = line.replace("%SELECTED_MATERIAL%", playerData.getTrimMaterial() != null ? capitalizeWords(playerData.getTrimMaterial().getKey().getKey()) : "None");
+                line = line.replace("%SELECTED_MATERIAL%", playerData.getTrimMaterial() != null ? capitalizeWords(Registry.TRIM_MATERIAL.getKey(playerData.getTrimMaterial()).getKey()) : "None");
             }
             if(line.contains("%SELECTED_PATTERN%")) {
-                line = line.replace("%SELECTED_PATTERN%", playerData.getTrimPattern() != null ? capitalizeWords(playerData.getTrimPattern().getKey().getKey()) : "None");
+                //line = line.replace("%SELECTED_PATTERN%", playerData.getTrimPattern() != null ? capitalizeWords(playerData.getTrimPattern().getKey().getKey()) : "None");
+                line = line.replace("%SELECTED_PATTERN%", playerData.getTrimPattern() != null ? capitalizeWords(Registry.TRIM_PATTERN.getKey(playerData.getTrimPattern()).getKey()) : "None");
             }
             if(line.contains("%MAX_MATERIALS%")) {
                 line = line.replace("%MAX_MATERIALS%", String.valueOf(JoltingTrims.getInstance().getDataManager().getMaxTrimMaterials()));

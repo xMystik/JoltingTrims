@@ -53,9 +53,8 @@ public class DataManager {
         }
     }
 
-    public boolean startReloading() {
+    public void startReloading() {
         reloadFlag = true;
-        return true;
     }
     public boolean isReloading() {
         return reloadFlag;
