@@ -64,12 +64,7 @@ public class JToast {
                     "    }\n" +
                     "}";
 
-            try {
-                Bukkit.getUnsafe().loadAdvancement(key, advancementJson);
-                System.out.println("Advancement loaded successfully: " + advancementJson);
-            } catch (Exception e) {
-                System.out.println("Error loading advancement: " + e.getMessage());
-            }
+            Bukkit.getUnsafe().loadAdvancement(key, advancementJson);
 
         } else {
             Bukkit.getUnsafe().loadAdvancement(key, "{\n" +
