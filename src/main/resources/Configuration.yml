@@ -72,6 +72,13 @@ Patterns:
   SPIRE:
     enabled: true
     permission: joltingtrims.pattern.spire
+  # 1.21 PATTERNS
+  FLOW:
+    enabled: true
+    permission: joltingtrims.pattern.flow
+  BOLT:
+    enabled: true
+    permission: joltingtrims.pattern.bolt
 
 # Materials Configuration Section
 Materials:
@@ -105,3 +112,6 @@ Materials:
   REDSTONE:
     enabled: true
     permission: joltingtrims.material.redstone
+  RESIN_BRICK:
+    enabled: true
+    permission: joltingtrims.material.resin

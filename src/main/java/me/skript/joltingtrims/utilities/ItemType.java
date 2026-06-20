@@ -1,4 +1,4 @@
-package me.skript.joltingtrims.utilities.enums;
+package me.skript.joltingtrims.utilities;
 
 public enum ItemType {
 

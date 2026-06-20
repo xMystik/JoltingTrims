@@ -1,10 +1,10 @@
 package me.skript.joltingtrims.menus;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
-import me.skript.joltingtrims.data.tempdata.PlayerData;
+import me.skript.joltingtrims.data.DataManager;
+import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.utilities.JItemBuilder;
-import me.skript.joltingtrims.utilities.JMenu;
+import me.skript.joltinglib.items.JItemBuilder;
+import me.skript.joltinglib.inventories.JMenu;
 import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,7 +38,7 @@ public class MaterialMenu extends JMenu {
 
     @Override
     public String getTitle() {
-        return JUtil.format(plugin.getMaterialMenuFile().getString("menu-title"));
+        return JUtil.format(plugin.getMaterialMenuFile().getString("menu-title", "Undefined"));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MaterialMenu extends JMenu {
 
         if (materialSection != null) {
 
-            PlayerData playerData = dataManager.getOrCreatePlayerData(getOwner());
+            PlayerData playerData = dataManager.getPlayerData(getOwner());
             TrimMaterial selectedTrimMaterial = playerData.getTrimMaterial();
 
             for (String matName : materialSection.getKeys(false)) {
@@ -75,14 +75,14 @@ public class MaterialMenu extends JMenu {
                         ItemStack matItem = new JItemBuilder(Material.getMaterial(matName))
                                 .setAmount(1)
                                 .setDisplayName(plugin.getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matName))))
-                                .setLore(itemLore)
-                                .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
+                                .setLoreFromStringList(itemLore)
+                                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                                 .build();
 
                         // Check if this item's material matches the selected TrimMaterial
                         if (selectedTrimMaterial != null && JUtil.convertToTrimMaterial(Material.getMaterial(matName)) == selectedTrimMaterial) {
                             // Add the glowing enchantment
-                            matItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                            matItem.addUnsafeEnchantment(Enchantment.PROTECTION, 1);
                         }
 
                         // Adds the material item to the GUI
@@ -94,6 +94,5 @@ public class MaterialMenu extends JMenu {
     }
 
     @Override
-    public void handleMenuClicks(InventoryClickEvent event) {
-    }
+    public void handleClicks(InventoryClickEvent event) {}
 }

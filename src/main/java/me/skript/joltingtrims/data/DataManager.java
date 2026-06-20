@@ -1,4 +1,4 @@
-package me.skript.joltingtrims.data.tempdata;
+package me.skript.joltingtrims.data;
 
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.menus.GeneralMenu;
@@ -22,10 +22,12 @@ public class DataManager {
         this.plugin = plugin;
     }
 
-    public PlayerData getOrCreatePlayerData(Player player) {
+    public PlayerData getPlayerData(Player player) {
+        // Get existing data
         if(managerMap.containsKey(player.getUniqueId())) {
             return managerMap.get(player.getUniqueId());
         }
+        // Create new data
         else {
             PlayerData data = new PlayerData(player.getUniqueId());
             managerMap.put(player.getUniqueId(), data);

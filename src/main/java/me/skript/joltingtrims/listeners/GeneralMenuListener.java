@@ -1,13 +1,13 @@
 package me.skript.joltingtrims.listeners;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
+import me.skript.joltingtrims.data.DataManager;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.data.tempdata.PlayerData;
+import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.menus.GeneralMenu;
 import me.skript.joltingtrims.menus.MaterialMenu;
 import me.skript.joltingtrims.menus.PatternMenu;
 import me.skript.joltingtrims.utilities.*;
-import me.skript.joltingtrims.utilities.enums.ItemType;
+import me.skript.joltingtrims.utilities.ItemType;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -43,7 +43,7 @@ public class GeneralMenuListener implements Listener {
         if(event.getView().getTopInventory().getHolder() instanceof GeneralMenu && event.getView().getBottomInventory().getHolder() instanceof Player) {
             event.setCancelled(true);
 
-            dataManager.getOrCreatePlayerData(player);
+            dataManager.getPlayerData(player);
 
             // Handle all the Item movement clicks
             handleItemMovement(event, player);
@@ -59,7 +59,7 @@ public class GeneralMenuListener implements Listener {
         Player player = (Player) event.getPlayer();
 
         if(inventory.getHolder() instanceof GeneralMenu) {
-            ItemStack savedEditItem = dataManager.getOrCreatePlayerData(player).getEditingItem();
+            ItemStack savedEditItem = dataManager.getPlayerData(player).getEditingItem();
             if (savedEditItem != null) {
                 inventory.setItem(plugin.getGeneralMenuFile().getInt("item-slot"), savedEditItem);
             }
@@ -77,16 +77,16 @@ public class GeneralMenuListener implements Listener {
 
             // Check if InventoryClose was caused to open a new Inventory
             if(event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-                dataManager.getOrCreatePlayerData(player).setEditingItem(editItem);
+                dataManager.getPlayerData(player).setEditingItem(editItem);
             }
             // Check if the reason is the plugin /reload command
             else if(event.getReason().equals(InventoryCloseEvent.Reason.PLUGIN)) {
                 // Check if the files are reloading
                 if(dataManager.isReloading()) {
                     // If they are then check if the player's saved item is not null
-                    if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
+                    if(dataManager.getPlayerData(player).getEditingItem() != null) {
                         // If its not null then give the item back to the player
-                        player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
+                        player.getInventory().addItem(dataManager.getPlayerData(player).getEditingItem());
                     }
                 }
                 // Clear the player data
@@ -132,7 +132,7 @@ public class GeneralMenuListener implements Listener {
                 player.getInventory().addItem(currentSlotItem);
             }
 
-            dataManager.getOrCreatePlayerData(player).setEditingItem(clickedItem);
+            dataManager.getPlayerData(player).setEditingItem(clickedItem);
             topInventory.setItem(guiSlot, clickedItem);
             JUtil.playSound(player, buttonSound, 0.5f, 1.0f);
         }
@@ -190,7 +190,7 @@ public class GeneralMenuListener implements Listener {
                 return;
             }
 
-            PlayerData playerData = dataManager.getOrCreatePlayerData(player);
+            PlayerData playerData = dataManager.getPlayerData(player);
             player.getInventory().addItem(JTrimFactory.setupItem(playerData));
         }
     }

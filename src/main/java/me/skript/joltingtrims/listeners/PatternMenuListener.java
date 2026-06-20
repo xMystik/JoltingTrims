@@ -1,11 +1,11 @@
 package me.skript.joltingtrims.listeners;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
-import me.skript.joltingtrims.data.tempdata.PlayerData;
+import me.skript.joltingtrims.data.DataManager;
+import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.menus.GeneralMenu;
 import me.skript.joltingtrims.menus.PatternMenu;
-import me.skript.joltingtrims.utilities.enums.ItemType;
+import me.skript.joltingtrims.utilities.ItemType;
 import me.skript.joltingtrims.utilities.JUtil;
 import me.skript.joltingtrims.utilities.JTrimFactory;
 import org.bukkit.Sound;
@@ -17,7 +17,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -60,8 +62,8 @@ public class PatternMenuListener implements Listener {
             Player player = (Player) event.getPlayer();
 
             if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-                if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
-                    player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
+                if(dataManager.getPlayerData(player).getEditingItem() != null) {
+                    player.getInventory().addItem(dataManager.getPlayerData(player).getEditingItem());
                 }
                 dataManager.clearPlayerData(player);
             }
@@ -94,7 +96,7 @@ public class PatternMenuListener implements Listener {
                             JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("button-click-sound")), 0.5f, 1.0f);
                         }
                         else if(type.equals(ItemType.CLEAR_PATTERN.getString())) {
-                            JTrimFactory.resetArmorPattern(dataManager.getOrCreatePlayerData(player));
+                            JTrimFactory.resetArmorPattern(dataManager.getPlayerData(player));
                             JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("clear-pattern-sound")), 1.0f, 1.5f);
                         }
                     }
@@ -123,7 +125,7 @@ public class PatternMenuListener implements Listener {
 
     private void handlePatternClick(Player player, ItemStack clickedItem, ConfigurationSection patSection, InventoryClickEvent event) {
         List<String> itemLore = plugin.getPatternMenuFile().getStringList("patterns-lore");
-        PlayerData playerData = dataManager.getOrCreatePlayerData(player);
+        PlayerData playerData = dataManager.getPlayerData(player);
 
         for (int i = 0; i < itemLore.size(); i++) {
             String loreLine = itemLore.get(i);
@@ -149,7 +151,7 @@ public class PatternMenuListener implements Listener {
                     for (int slot = 0; slot < inventoryView.getTopInventory().getSize(); slot++) {
                         ItemStack itemInSlot = inventoryView.getTopInventory().getItem(slot);
                         if (itemInSlot != null && JUtil.convertToTrimPattern(itemInSlot.getType()) == playerData.getPreviousTrimPattern()) {
-                            itemInSlot.removeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL);
+                            itemInSlot.removeEnchantment(Enchantment.PROTECTION);
                         }
                     }
                 }
@@ -159,7 +161,11 @@ public class PatternMenuListener implements Listener {
                 JUtil.playSound(player, Sound.valueOf(plugin.getPatternMenuFile().getString("pattern-unlocked-sound")), 1.0f, 1.5f);
 
                 // Add an enchantment to make the item glow
-                patItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                patItem.addUnsafeEnchantment(Enchantment.PROTECTION, 1);
+
+                ItemMeta newPatItemMeta = patItem.getItemMeta();
+                newPatItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                patItem.setItemMeta(newPatItemMeta);
 
                 // Update the clicked item in the Pattern Menu with the new glowing item
                 int clickedSlot = event.getRawSlot();

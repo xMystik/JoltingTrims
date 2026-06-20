@@ -3,7 +3,7 @@ package me.skript.joltingtrims.commands;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.menus.GeneralMenu;
 import me.skript.joltingtrims.utilities.JUtil;
-import me.skript.joltingtrims.data.tempdata.DataManager;
+import me.skript.joltingtrims.data.DataManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -61,7 +61,7 @@ public class TrimCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 else if(args[0].equalsIgnoreCase("version")) {
-                    player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version: &e&l" + plugin.getPluginMeta().getVersion()));
+                    player.sendMessage(JUtil.format("&3&l[JoltingTrims] &7Current plugin version &e&l" + plugin.getPluginMeta().getVersion()));
                     return true;
                 }
                 else {

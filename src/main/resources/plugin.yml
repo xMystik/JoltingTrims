@@ -1,9 +1,10 @@
 name: JoltingTrims
 version: '${project.version}'
 main: me.skript.joltingtrims.JoltingTrims
-api-version: 1.20
+api-version: 1.21
 authors: [ Skript ]
 description: Your stylish way of selecting a new cool trim for your armor!
+depend: [ JoltingLib ]
 commands:
   trim:
     description: Main command of the armor trimming settings!

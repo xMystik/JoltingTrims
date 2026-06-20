@@ -1,7 +1,7 @@
 package me.skript.joltingtrims.menus;
 
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.utilities.JMenu;
+import me.skript.joltinglib.inventories.JMenu;
 import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ public class GeneralMenu extends JMenu {
 
     @Override
     public String getTitle() {
-        return JUtil.format(plugin.getGeneralMenuFile().getString("menu-title"));
+        return JUtil.format(plugin.getGeneralMenuFile().getString("menu-title", "Undefined"));
     }
 
     @Override
@@ -38,7 +38,5 @@ public class GeneralMenu extends JMenu {
     }
 
     @Override
-    public void handleMenuClicks(InventoryClickEvent event) {
-    }
-
+    public void handleClicks(InventoryClickEvent event) {}
 }

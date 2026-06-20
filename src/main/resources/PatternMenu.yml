@@ -79,8 +79,6 @@ Layout:
       - 6
       - 7
       - 37
-      - 38
-      - 42
       - 43
   Clear-Item-1:
     type: CLEAR_PATTERN

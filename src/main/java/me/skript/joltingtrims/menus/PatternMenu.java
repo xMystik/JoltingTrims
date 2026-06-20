@@ -1,10 +1,10 @@
 package me.skript.joltingtrims.menus;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
-import me.skript.joltingtrims.data.tempdata.PlayerData;
+import me.skript.joltingtrims.data.DataManager;
+import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltingtrims.utilities.JItemBuilder;
-import me.skript.joltingtrims.utilities.JMenu;
+import me.skript.joltinglib.items.JItemBuilder;
+import me.skript.joltinglib.inventories.JMenu;
 import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,7 +38,7 @@ public class PatternMenu extends JMenu {
 
     @Override
     public String getTitle() {
-        return JUtil.format(plugin.getPatternMenuFile().getString("menu-title"));
+        return JUtil.format(plugin.getPatternMenuFile().getString("menu-title", "Undefined"));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PatternMenu extends JMenu {
 
         if (patternsSection != null) {
 
-            PlayerData playerData = dataManager.getOrCreatePlayerData(getOwner());
+            PlayerData playerData = dataManager.getPlayerData(getOwner());
             TrimPattern selectedTrimPattern = playerData.getTrimPattern();
 
             for (String patName : patternsSection.getKeys(false)) {
@@ -76,14 +76,14 @@ public class PatternMenu extends JMenu {
                         ItemStack patItem = new JItemBuilder(Material.getMaterial(patName + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
                                 .setAmount(1)
                                 .setDisplayName(plugin.getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JUtil.capitalizeWords(patName)))
-                                .setLore(itemLore)
-                                .setItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
+                                .setLoreFromStringList(itemLore)
+                                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
                                 .build();
 
                         // Check if this pattern matches the selected TrimPattern
                         if (selectedTrimPattern != null && JUtil.convertToTrimPattern(Material.getMaterial(patName + "_ARMOR_TRIM_SMITHING_TEMPLATE")) == selectedTrimPattern) {
                             // Add the glowing enchantment
-                            patItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                            patItem.addUnsafeEnchantment(Enchantment.PROTECTION, 1);
                         }
 
                         // Add the trim item to the GUI
@@ -95,7 +95,6 @@ public class PatternMenu extends JMenu {
     }
 
     @Override
-    public void handleMenuClicks(InventoryClickEvent event) {
+    public void handleClicks(InventoryClickEvent event) {}
 
-    }
 }

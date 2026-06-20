@@ -1,4 +1,4 @@
-package me.skript.joltingtrims.data.tempdata;
+package me.skript.joltingtrims.data;
 
 import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Bukkit;
@@ -34,7 +34,6 @@ public class PlayerData {
     public PlayerData(UUID playerUUID) {
         this.playerUUID = playerUUID;
     }
-
 
     public Player getPlayer() {
         return Bukkit.getPlayer(playerUUID);

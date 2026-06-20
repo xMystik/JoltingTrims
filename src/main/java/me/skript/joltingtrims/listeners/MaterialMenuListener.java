@@ -1,12 +1,12 @@
 package me.skript.joltingtrims.listeners;
 
-import me.skript.joltingtrims.data.tempdata.DataManager;
-import me.skript.joltingtrims.data.tempdata.PlayerData;
+import me.skript.joltingtrims.data.DataManager;
+import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltingtrims.menus.GeneralMenu;
 import me.skript.joltingtrims.menus.MaterialMenu;
 import me.skript.joltingtrims.utilities.*;
-import me.skript.joltingtrims.utilities.enums.ItemType;
+import me.skript.joltingtrims.utilities.ItemType;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -16,7 +16,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -59,8 +61,8 @@ public class MaterialMenuListener implements Listener {
             Player player = (Player) event.getPlayer();
 
             if(!event.getReason().equals(InventoryCloseEvent.Reason.OPEN_NEW)) {
-                if(dataManager.getOrCreatePlayerData(player).getEditingItem() != null) {
-                    player.getInventory().addItem(dataManager.getOrCreatePlayerData(player).getEditingItem());
+                if(dataManager.getPlayerData(player).getEditingItem() != null) {
+                    player.getInventory().addItem(dataManager.getPlayerData(player).getEditingItem());
                 }
                 dataManager.clearPlayerData(player);
             }
@@ -119,7 +121,7 @@ public class MaterialMenuListener implements Listener {
 
     private void handleMaterialClick(Player player, ItemStack clickedItem, ConfigurationSection matSection, InventoryClickEvent event) {
         List<String> itemLore = plugin.getMaterialMenuFile().getStringList("materials-lore");
-        PlayerData playerData = dataManager.getOrCreatePlayerData(player);
+        PlayerData playerData = dataManager.getPlayerData(player);
 
         for (int i = 0; i < itemLore.size(); i++) {
             String loreLine = itemLore.get(i);
@@ -145,7 +147,7 @@ public class MaterialMenuListener implements Listener {
                     for (int slot = 0; slot < inventoryView.getTopInventory().getSize(); slot++) {
                         ItemStack itemInSlot = inventoryView.getTopInventory().getItem(slot);
                         if (itemInSlot != null && JUtil.convertToTrimMaterial(itemInSlot.getType()) == playerData.getPreviousTrimMaterial()) {
-                            itemInSlot.removeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL);
+                            itemInSlot.removeEnchantment(Enchantment.PROTECTION);
                         }
                     }
                 }
@@ -155,7 +157,11 @@ public class MaterialMenuListener implements Listener {
                 JUtil.playSound(player, Sound.valueOf(plugin.getMaterialMenuFile().getString("material-unlocked-sound")), 1.0f, 2.0f);
 
                 // Add an enchantment to make the item glow
-                matItem.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                matItem.addUnsafeEnchantment(Enchantment.PROTECTION, 1);
+
+                ItemMeta newMatItemMeta = matItem.getItemMeta();
+                newMatItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                matItem.setItemMeta(newMatItemMeta);
 
                 // Update the clicked item in the Material Menu with the new glowing item
                 int clickedSlot = event.getRawSlot();
