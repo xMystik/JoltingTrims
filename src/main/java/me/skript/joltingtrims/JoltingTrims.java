@@ -3,8 +3,8 @@ package me.skript.joltingtrims;
 import me.skript.joltingtrims.commands.TrimCommand;
 import me.skript.joltingtrims.listeners.GeneralMenuListener;
 import me.skript.joltingtrims.listeners.MaterialMenuListener;
+import me.skript.joltingtrims.listeners.MenuBlockListener;
 import me.skript.joltingtrims.listeners.PatternMenuListener;
-import me.skript.joltingtrims.listeners.SmithingTableListener;
 import me.skript.joltingtrims.data.DataManager;
 import me.skript.joltingtrims.utilities.JUtil;
 import me.skript.joltinglib.configurations.JFilesManager;
@@ -47,7 +47,7 @@ public final class JoltingTrims extends JavaPlugin {
         new GeneralMenuListener(this);
         new MaterialMenuListener(this);
         new PatternMenuListener(this);
-        new SmithingTableListener(this);
+        new MenuBlockListener(this);
 
         Bukkit.getConsoleSender().sendMessage(JUtil.format("&3&l[JoltingTrims] &7The plugin has been enabled!"));
     }

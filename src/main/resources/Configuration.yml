@@ -4,8 +4,8 @@
 #                    Author: Skript                     #
 #########################################################
 
-# Enabling this option makes it so right-clicking a smithing table opens up the general menu
-replace-smithing-table: true
+# The block material that opens the general menu when right-clicked
+menu-block-material: STONECUTTER
 
 # Enabling this option allows the users to open the main menu through the /trim menu command
 trim-command: true
