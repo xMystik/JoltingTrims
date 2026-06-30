@@ -5,9 +5,11 @@ import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltinglib.items.JItemBuilder;
 import me.skript.joltinglib.toasts.JToastBuilder;
 import me.skript.joltinglib.toasts.JToastType;
+import io.papermc.paper.datacomponent.DataComponentType;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -15,8 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,21 +48,21 @@ public class JUtil {
     }
 
     public static ItemStack buildMaterialItem(ConfigurationSection matSection, List<String> itemLore) {
-        return new JItemBuilder(Material.getMaterial(matSection.getName()))
+        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(matSection.getName()))
                 .setAmount(1)
                 .setDisplayName(JoltingTrims.getInstance().getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matSection.getName()))))
                 .setLoreFromStringList(itemLore)
-                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
-                .build();
+                .hideItemFlags()
+                .build());
     }
 
     public static ItemStack buildPatternItem(ConfigurationSection patSection, List<String> itemLore) {
-        return new JItemBuilder(Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
+        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
                 .setAmount(1)
                 .setDisplayName(JoltingTrims.getInstance().getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JUtil.capitalizeWords(patSection.getName())))
                 .setLoreFromStringList(itemLore)
-                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
-                .build();
+                .hideItemFlags()
+                .build());
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection, Player player) {
@@ -66,13 +71,13 @@ public class JUtil {
 
         itemLore = replacePlaceholders(itemLore, playerData);
 
-        return new JItemBuilder(Material.getMaterial(itemSection.getString("material", "STONE")))
+        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(itemSection.getString("material", "STONE")))
                 .setAmount(1)
                 .setDisplayName(itemSection.getString("name"))
                 .setLoreFromStringList(itemLore)
                 .setCustomModelData(itemSection.getInt("model"))
-                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
-                .build();
+                .hideItemFlags()
+                .build());
     }
 
     public static List<String> replacePlaceholders(List<String> itemLore, PlayerData playerData) {
@@ -106,13 +111,64 @@ public class JUtil {
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection) {
-        return new JItemBuilder(Material.getMaterial(itemSection.getString("material", "STONE")))
+        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(itemSection.getString("material", "STONE")))
                 .setAmount(1)
                 .setDisplayName(itemSection.getString("name"))
                 .setLoreFromStringList(itemSection.getStringList("lore"))
                 .setCustomModelData(itemSection.getInt("model"))
-                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
-                .build();
+                .hideItemFlags()
+                .build());
+    }
+
+    public static ItemStack hideVanillaTooltipData(ItemStack item) {
+        Set<DataComponentType> hiddenComponents = new LinkedHashSet<>(Arrays.asList(
+                DataComponentTypes.MAX_STACK_SIZE,
+                DataComponentTypes.MAX_DAMAGE,
+                DataComponentTypes.DAMAGE,
+                DataComponentTypes.UNBREAKABLE,
+                DataComponentTypes.CAN_PLACE_ON,
+                DataComponentTypes.CAN_BREAK,
+                DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                DataComponentTypes.ENCHANTMENTS,
+                DataComponentTypes.REPAIR_COST,
+                DataComponentTypes.FOOD,
+                DataComponentTypes.CONSUMABLE,
+                DataComponentTypes.TOOL,
+                DataComponentTypes.WEAPON,
+                DataComponentTypes.ENCHANTABLE,
+                DataComponentTypes.EQUIPPABLE,
+                DataComponentTypes.REPAIRABLE,
+                DataComponentTypes.BLOCKS_ATTACKS,
+                DataComponentTypes.STORED_ENCHANTMENTS,
+                DataComponentTypes.DYED_COLOR,
+                DataComponentTypes.MAP_COLOR,
+                DataComponentTypes.POTION_CONTENTS,
+                DataComponentTypes.WRITTEN_BOOK_CONTENT,
+                DataComponentTypes.TRIM,
+                DataComponentTypes.PROVIDES_TRIM_MATERIAL,
+                DataComponentTypes.PROVIDES_BANNER_PATTERNS,
+                DataComponentTypes.RECIPES,
+                DataComponentTypes.BANNER_PATTERNS,
+                DataComponentTypes.POT_DECORATIONS,
+                DataComponentTypes.CONTAINER,
+                DataComponentTypes.BLOCK_DATA,
+                DataComponentTypes.CONTAINER_LOOT
+        ));
+
+        TooltipDisplay currentTooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
+        if(currentTooltipDisplay != null) {
+            hiddenComponents.addAll(currentTooltipDisplay.hiddenComponents());
+        }
+
+        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                .hideTooltip(false)
+                .hiddenComponents(hiddenComponents));
+        item.editMeta(meta -> {
+            meta.addItemFlags(ItemFlag.values());
+            meta.setHideTooltip(false);
+        });
+
+        return item;
     }
 
     public static void setupInventoryLayout(ConfigurationSection layoutSection, Inventory inventory) {
@@ -191,6 +247,10 @@ public class JUtil {
                  IRON_LEGGINGS,
                  IRON_CHESTPLATE,
                  IRON_HELMET,
+                 COPPER_BOOTS,
+                 COPPER_LEGGINGS,
+                 COPPER_CHESTPLATE,
+                 COPPER_HELMET,
                  GOLDEN_BOOTS,
                  GOLDEN_LEGGINGS,
                  GOLDEN_CHESTPLATE,
@@ -299,22 +359,6 @@ public class JUtil {
         return result.toString();
     }
 
-    public static void playSound(Player player, FileConfiguration file, String soundVariable) {
-        if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("sounds-enabled")) {
-            Sound sound = Sound.valueOf(file.getString(soundVariable));
-
-            player.playSound(player, sound, 1.0f, 1.0f);
-        }
-    }
-
-    public static void playSound(Player player, String soundVariable) {
-        if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("sounds-enabled")) {
-            Sound sound = Sound.valueOf(soundVariable);
-
-            player.playSound(player, sound, 1.0f, 1.0f);
-        }
-    }
-
     public static void playSound(Player player, Sound sound) {
         if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("sounds-enabled")) {
             player.playSound(player, sound, 1.0f, 1.0f);
@@ -325,6 +369,50 @@ public class JUtil {
         if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("sounds-enabled")) {
             player.playSound(player, sound, volume, pitch);
         }
+    }
+
+    public static void playSound(Player player, String configuredSound) {
+        playSound(player, configuredSound, 1.0f, 1.0f);
+    }
+
+    public static void playSound(Player player, String configuredSound, Float volume, Float pitch) {
+        if(!JoltingTrims.getInstance().getConfigurationFile().getBoolean("sounds-enabled")) {
+            return;
+        }
+
+        Sound sound = getSound(configuredSound);
+        if(sound == null) {
+            JoltingTrims.getInstance().getLogger().warning("Invalid sound in menu configuration: " + configuredSound);
+            return;
+        }
+
+        player.playSound(player, sound, volume, pitch);
+    }
+
+    public static Sound getSound(String configuredSound) {
+        if(configuredSound == null || configuredSound.isBlank()) {
+            return null;
+        }
+
+        NamespacedKey configuredKey = NamespacedKey.fromString(configuredSound.toLowerCase());
+        if(configuredKey != null) {
+            Sound sound = Registry.SOUNDS.get(configuredKey);
+            if(sound != null) {
+                return sound;
+            }
+        }
+
+        String legacySoundName = configuredSound.toLowerCase();
+        if(legacySoundName.contains(":")) {
+            legacySoundName = legacySoundName.substring(legacySoundName.indexOf(':') + 1);
+        }
+
+        String finalLegacySoundName = legacySoundName;
+        return Registry.SOUNDS.keyStream()
+                .filter(key -> key.getKey().replace('.', '_').equals(finalLegacySoundName))
+                .findFirst()
+                .map(Registry.SOUNDS::get)
+                .orElse(null);
     }
 
     public static void showToast(Player player) {

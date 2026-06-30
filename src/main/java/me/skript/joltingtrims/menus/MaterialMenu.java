@@ -11,7 +11,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 
@@ -72,12 +71,12 @@ public class MaterialMenu extends JMenu {
                             }
                         }
 
-                        ItemStack matItem = new JItemBuilder(Material.getMaterial(matName))
+                        ItemStack matItem = JUtil.hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(matName))
                                 .setAmount(1)
                                 .setDisplayName(plugin.getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matName))))
                                 .setLoreFromStringList(itemLore)
-                                .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ARMOR_TRIM, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_DYE, ItemFlag.HIDE_ENCHANTS)
-                                .build();
+                                .hideItemFlags()
+                                .build());
 
                         // Check if this item's material matches the selected TrimMaterial
                         if (selectedTrimMaterial != null && JUtil.convertToTrimMaterial(Material.getMaterial(matName)) == selectedTrimMaterial) {

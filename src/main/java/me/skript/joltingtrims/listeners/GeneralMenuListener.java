@@ -9,7 +9,6 @@ import me.skript.joltingtrims.menus.PatternMenu;
 import me.skript.joltingtrims.utilities.*;
 import me.skript.joltingtrims.utilities.ItemType;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -107,7 +106,6 @@ public class GeneralMenuListener implements Listener {
         ItemStack clickedItem = event.getCurrentItem();
         Inventory topInventory = event.getView().getTopInventory();
         int guiSlot = plugin.getGeneralMenuFile().getInt("item-slot");
-        Sound buttonSound = Sound.valueOf(plugin.getGeneralMenuFile().getString("button-click-sound"));
 
         if (!JUtil.isArmorPiece(clickedItem.getType())) {
             return;
@@ -120,7 +118,7 @@ public class GeneralMenuListener implements Listener {
                 dataManager.clearPlayerData(player);
                 player.getInventory().addItem(currentSlotItem);
                 topInventory.setItem(guiSlot, null);
-                JUtil.playSound(player, buttonSound, 0.5f, 1.0f);
+                JUtil.playSound(player, plugin.getGeneralMenuFile().getString("button-click-sound"), 0.5f, 1.0f);
             }
         } else {
             player.getInventory().removeItem(clickedItem);
@@ -134,7 +132,7 @@ public class GeneralMenuListener implements Listener {
 
             dataManager.getPlayerData(player).setEditingItem(clickedItem);
             topInventory.setItem(guiSlot, clickedItem);
-            JUtil.playSound(player, buttonSound, 0.5f, 1.0f);
+            JUtil.playSound(player, plugin.getGeneralMenuFile().getString("button-click-sound"), 0.5f, 1.0f);
         }
     }
 
@@ -166,18 +164,16 @@ public class GeneralMenuListener implements Listener {
 
     private void handleItemTypeInteraction(Player player, String itemType, Inventory topInventory) {
         // Checks the Item's interaction type
-        Sound buttonSound = Sound.valueOf(plugin.getGeneralMenuFile().getString("button-click-sound"));
-        Sound failSound = Sound.valueOf(plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
 
         if (itemType.equals(ItemType.MATERIAL_MENU_OPENER.getString())) {
 
             new MaterialMenu(player).openMenu();
-            JUtil.playSound(player, buttonSound, 0.5f, 1.0f);
+            JUtil.playSound(player, plugin.getGeneralMenuFile().getString("button-click-sound"), 0.5f, 1.0f);
 
         } else if (itemType.equals(ItemType.PATTERN_MENU_OPENER.getString())) {
 
             new PatternMenu(player).openMenu();
-            JUtil.playSound(player, buttonSound, 0.5f, 1.0f);
+            JUtil.playSound(player, plugin.getGeneralMenuFile().getString("button-click-sound"), 0.5f, 1.0f);
 
         } else if (itemType.equals(ItemType.FINALIZE_CHANGES.getString())) {
             // Gets the item on the specified item slot
@@ -186,7 +182,7 @@ public class GeneralMenuListener implements Listener {
             // Checks if an item exists on the specified slot. If it doesn't then throw an error message
             if (guiSlotItem == null) {
                 player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("insert-item")));
-                JUtil.playSound(player, failSound, 1.0f, 0.5f);
+                JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"), 1.0f, 0.5f);
                 return;
             }
 

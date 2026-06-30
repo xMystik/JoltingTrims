@@ -6,7 +6,7 @@
 
     <groupId>me.skript</groupId>
     <artifactId>JoltingTrims</artifactId>
-    <version>1.0.9</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>JoltingTrims</name>
@@ -15,6 +15,7 @@
     <properties>
         <java.version>21</java.version>
         <paper.version>1.21.11-R0.1-SNAPSHOT</paper.version>
+        <server.plugins.directory>C:/Users/giann/Desktop/Servers/Experimental 1.21.4/plugins</server.plugins.directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -26,6 +27,14 @@
                 <version>3.15.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <outputDirectory>${server.plugins.directory}</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

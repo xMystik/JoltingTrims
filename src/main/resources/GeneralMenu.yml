@@ -85,8 +85,8 @@ Layout:
     model: 0
     name: '&3&lMaterial Menu'
     lore:
-      - '&e&l• &7Unlocked Materials &e%UNLOCKED_MATERIALS%&8/&6%MAX_MATERIALS%'
-      - '&e&l• &7Currently Selected &e%SELECTED_MATERIAL%'
+      - '&e&l• &r&7Unlocked Materials &e%UNLOCKED_MATERIALS%&8/&6%MAX_MATERIALS%'
+      - '&e&l• &r&7Currently Selected &e%SELECTED_MATERIAL%'
       - '&7'
       - '&e(Click here to select a material)'
     slots:
@@ -97,8 +97,8 @@ Layout:
     model: 0
     name: '&3&lPattern Menu'
     lore:
-      - '&e&l• &7Unlocked Patterns &e%UNLOCKED_PATTERNS%&8/&6%MAX_PATTERNS%'
-      - '&e&l• &7Currently Selected &e%SELECTED_PATTERN%'
+      - '&e&l• &r&7Unlocked Patterns &e%UNLOCKED_PATTERNS%&8/&6%MAX_PATTERNS%'
+      - '&e&l• &r&7Currently Selected &e%SELECTED_PATTERN%'
       - '&7'
       - '&e(Click here to select a pattern)'
     slots:
@@ -109,8 +109,8 @@ Layout:
     model: 0
     name: '&a&lApply Changes'
     lore:
-      - '&e&l• &7Selected Pattern &6%SELECTED_PATTERN%'
-      - '&e&l• &7Selected Material &6%SELECTED_MATERIAL%'
+      - '&e&l• &r&7Selected Pattern &6%SELECTED_PATTERN%'
+      - '&e&l• &r&7Selected Material &6%SELECTED_MATERIAL%'
       - '&7'
       - '&e(Click here to apply the changes)'
     slots:

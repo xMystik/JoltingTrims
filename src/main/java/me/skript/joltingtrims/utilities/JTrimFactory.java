@@ -2,7 +2,6 @@ package me.skript.joltingtrims.utilities;
 
 import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -19,9 +18,6 @@ public class JTrimFactory {
         ArmorTrim tempTrim;
         Player player = playerData.getPlayer();
 
-        Sound applyChangesSuccess = Sound.valueOf(plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
-        Sound applyChangesFailure = Sound.valueOf(plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
-
         // Check if the item exists, has an item meta and its meta is an armor meta
         if(playerData.getEditingItem() != null) {
 
@@ -37,26 +33,26 @@ public class JTrimFactory {
                         tempArmorMeta.setTrim(tempTrim);
 
                         JUtil.showToast(player);
-                        JUtil.playSound(player, applyChangesSuccess);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
                         tempTrim = new ArmorTrim(tempArmorMeta.getTrim().getMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
                         JUtil.showToast(player);
-                        JUtil.playSound(player, applyChangesSuccess);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
                     }
                     else if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() != null) {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
                         tempArmorMeta.setTrim(tempTrim);
 
                         JUtil.showToast(player);
-                        JUtil.playSound(player, applyChangesSuccess);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
                     }
                     else {
                         playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-mat-or-pat")));
 
-                        JUtil.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                     }
                     tempItem.setItemMeta(tempArmorMeta);
                 }
@@ -64,17 +60,17 @@ public class JTrimFactory {
                     if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() == null) {
                         playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-pattern")));
 
-                        JUtil.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
                         playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-material")));
 
-                        JUtil.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                     }
                     else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() == null) {
                         playerData.getPlayer().sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
 
-                        JUtil.playSound(player, applyChangesFailure);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                     }
                     else {
                         tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
@@ -82,7 +78,7 @@ public class JTrimFactory {
                         tempItem.setItemMeta(tempArmorMeta);
 
                         JUtil.showToast(player);
-                        JUtil.playSound(player, applyChangesSuccess);
+                        JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
                     }
                 }
             }
@@ -90,17 +86,17 @@ public class JTrimFactory {
                 if(playerData.getTrimMaterial() != null && playerData.getTrimPattern() == null) {
                     player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-pattern")));
 
-                    JUtil.playSound(player, applyChangesFailure);
+                    JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                 }
                 else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() != null) {
                     player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-material")));
 
-                    JUtil.playSound(player, applyChangesFailure);
+                    JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                 }
                 else if(playerData.getTrimMaterial() == null && playerData.getTrimPattern() == null) {
                     player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("select-mat-and-pat")));
 
-                    JUtil.playSound(player, applyChangesFailure);
+                    JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-failure-sound"));
                 }
                 else {
                     tempTrim = new ArmorTrim(playerData.getTrimMaterial(), playerData.getTrimPattern());
@@ -108,7 +104,7 @@ public class JTrimFactory {
                     tempItem.setItemMeta(tempArmorMeta);
 
                     JUtil.showToast(player);
-                    JUtil.playSound(player, applyChangesSuccess);
+                    JUtil.playSound(player, plugin.getGeneralMenuFile().getString("apply-changes-success-sound"));
                 }
             }
         }
