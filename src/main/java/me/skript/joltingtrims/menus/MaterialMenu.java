@@ -71,12 +71,12 @@ public class MaterialMenu extends JMenu {
                             }
                         }
 
-                        ItemStack matItem = JUtil.hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(matName))
+                        ItemStack matItem = new JItemBuilder(Material.getMaterial(matName))
                                 .setAmount(1)
                                 .setDisplayName(plugin.getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matName))))
                                 .setLoreFromStringList(itemLore)
                                 .hideItemFlags()
-                                .build());
+                                .build();
 
                         // Check if this item's material matches the selected TrimMaterial
                         if (selectedTrimMaterial != null && JUtil.convertToTrimMaterial(Material.getMaterial(matName)) == selectedTrimMaterial) {

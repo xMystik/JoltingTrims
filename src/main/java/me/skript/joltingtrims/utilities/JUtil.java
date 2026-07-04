@@ -1,27 +1,24 @@
 package me.skript.joltingtrims.utilities;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
 import me.skript.joltinglib.items.JItemBuilder;
 import me.skript.joltinglib.toasts.JToastBuilder;
 import me.skript.joltinglib.toasts.JToastType;
-import io.papermc.paper.datacomponent.DataComponentType;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
+import net.kyori.adventure.key.Key;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,21 +45,25 @@ public class JUtil {
     }
 
     public static ItemStack buildMaterialItem(ConfigurationSection matSection, List<String> itemLore) {
-        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(matSection.getName()))
+        return new JItemBuilder(Material.getMaterial(matSection.getName()))
                 .setAmount(1)
                 .setDisplayName(JoltingTrims.getInstance().getMaterialMenuFile().getString("materials-name").replace("%MATERIAL%", JUtil.getDisplayNameOfMaterial(Material.getMaterial(matSection.getName()))))
                 .setLoreFromStringList(itemLore)
                 .hideItemFlags()
-                .build());
+                .build();
     }
 
     public static ItemStack buildPatternItem(ConfigurationSection patSection, List<String> itemLore) {
-        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
+        Material patternMaterial = Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE");
+        ItemStack item = new JItemBuilder(getGuiBaseMaterial(patternMaterial))
                 .setAmount(1)
                 .setDisplayName(JoltingTrims.getInstance().getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JUtil.capitalizeWords(patSection.getName())))
                 .setLoreFromStringList(itemLore)
                 .hideItemFlags()
-                .build());
+                .build();
+
+        applyItemModel(item, patternMaterial);
+        return item;
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection, Player player) {
@@ -71,13 +72,25 @@ public class JUtil {
 
         itemLore = replacePlaceholders(itemLore, playerData);
 
-        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(itemSection.getString("material", "STONE")))
+        Material configuredMaterial = Material.getMaterial(itemSection.getString("material", "STONE"));
+        ItemStack item = new JItemBuilder(getGuiBaseMaterial(configuredMaterial))
                 .setAmount(1)
                 .setDisplayName(itemSection.getString("name"))
                 .setLoreFromStringList(itemLore)
                 .setCustomModelData(itemSection.getInt("model"))
                 .hideItemFlags()
-                .build());
+                .build();
+
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null) {
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            item.setItemMeta(meta);
+        }
+
+        applyItemModel(item, configuredMaterial);
+
+        return item;
     }
 
     public static List<String> replacePlaceholders(List<String> itemLore, PlayerData playerData) {
@@ -111,64 +124,34 @@ public class JUtil {
     }
 
     public static ItemStack buildItemFromConfigSection(ConfigurationSection itemSection) {
-        return hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(itemSection.getString("material", "STONE")))
+        Material configuredMaterial = Material.getMaterial(itemSection.getString("material", "STONE"));
+        ItemStack item = new JItemBuilder(getGuiBaseMaterial(configuredMaterial))
                 .setAmount(1)
                 .setDisplayName(itemSection.getString("name"))
                 .setLoreFromStringList(itemSection.getStringList("lore"))
                 .setCustomModelData(itemSection.getInt("model"))
                 .hideItemFlags()
-                .build());
+                .build();
+
+        applyItemModel(item, configuredMaterial);
+        return item;
     }
 
-    public static ItemStack hideVanillaTooltipData(ItemStack item) {
-        Set<DataComponentType> hiddenComponents = new LinkedHashSet<>(Arrays.asList(
-                DataComponentTypes.MAX_STACK_SIZE,
-                DataComponentTypes.MAX_DAMAGE,
-                DataComponentTypes.DAMAGE,
-                DataComponentTypes.UNBREAKABLE,
-                DataComponentTypes.CAN_PLACE_ON,
-                DataComponentTypes.CAN_BREAK,
-                DataComponentTypes.ATTRIBUTE_MODIFIERS,
-                DataComponentTypes.ENCHANTMENTS,
-                DataComponentTypes.REPAIR_COST,
-                DataComponentTypes.FOOD,
-                DataComponentTypes.CONSUMABLE,
-                DataComponentTypes.TOOL,
-                DataComponentTypes.WEAPON,
-                DataComponentTypes.ENCHANTABLE,
-                DataComponentTypes.EQUIPPABLE,
-                DataComponentTypes.REPAIRABLE,
-                DataComponentTypes.BLOCKS_ATTACKS,
-                DataComponentTypes.STORED_ENCHANTMENTS,
-                DataComponentTypes.DYED_COLOR,
-                DataComponentTypes.MAP_COLOR,
-                DataComponentTypes.POTION_CONTENTS,
-                DataComponentTypes.WRITTEN_BOOK_CONTENT,
-                DataComponentTypes.TRIM,
-                DataComponentTypes.PROVIDES_TRIM_MATERIAL,
-                DataComponentTypes.PROVIDES_BANNER_PATTERNS,
-                DataComponentTypes.RECIPES,
-                DataComponentTypes.BANNER_PATTERNS,
-                DataComponentTypes.POT_DECORATIONS,
-                DataComponentTypes.CONTAINER,
-                DataComponentTypes.BLOCK_DATA,
-                DataComponentTypes.CONTAINER_LOOT
-        ));
+    public static Material getPatternMaterial(ConfigurationSection patSection) {
+        return Material.getMaterial(patSection.getName() + "_ARMOR_TRIM_SMITHING_TEMPLATE");
+    }
 
-        TooltipDisplay currentTooltipDisplay = item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
-        if(currentTooltipDisplay != null) {
-            hiddenComponents.addAll(currentTooltipDisplay.hiddenComponents());
+    private static Material getGuiBaseMaterial(Material material) {
+        return (material != null && material.name().endsWith("_SMITHING_TEMPLATE")) ? Material.PAPER : material;
+    }
+
+    private static void applyItemModel(ItemStack item, Material material) {
+        if (!(material != null && material.name().endsWith("_SMITHING_TEMPLATE"))) {
+            return;
         }
 
-        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                .hideTooltip(false)
-                .hiddenComponents(hiddenComponents));
-        item.editMeta(meta -> {
-            meta.addItemFlags(ItemFlag.values());
-            meta.setHideTooltip(false);
-        });
-
-        return item;
+        NamespacedKey key = material.getKey();
+        item.setData(DataComponentTypes.ITEM_MODEL, Key.key(key.getNamespace(), key.getKey()));
     }
 
     public static void setupInventoryLayout(ConfigurationSection layoutSection, Inventory inventory) {

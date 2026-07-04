@@ -8,6 +8,7 @@ import me.skript.joltingtrims.menus.PatternMenu;
 import me.skript.joltingtrims.utilities.ItemType;
 import me.skript.joltingtrims.utilities.JUtil;
 import me.skript.joltingtrims.utilities.JTrimFactory;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -146,17 +147,12 @@ public class PatternMenuListener implements Listener {
                 if (playerData.getTrimPattern() != null) {
                     playerData.setPreviousTrimPattern(playerData.getTrimPattern());
                     // Disenchant the previous TrimPattern
-                    InventoryView inventoryView = player.getOpenInventory();
-                    for (int slot = 0; slot < inventoryView.getTopInventory().getSize(); slot++) {
-                        ItemStack itemInSlot = inventoryView.getTopInventory().getItem(slot);
-                        if (itemInSlot != null && JUtil.convertToTrimPattern(itemInSlot.getType()) == playerData.getPreviousTrimPattern()) {
-                            itemInSlot.removeEnchantment(Enchantment.PROTECTION);
-                        }
-                    }
+                    clearPatternGlow(player.getOpenInventory());
                 }
 
                 // Set the new TrimPattern as the pattern that the player clicked
-                playerData.setTrimPattern(clickedItem.getType());
+                Material patternMaterial = JUtil.getPatternMaterial(patSection);
+                playerData.setTrimPattern(patternMaterial);
                 JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-unlocked-sound"), 1.0f, 1.5f);
 
                 // Add an enchantment to make the item glow
@@ -174,6 +170,15 @@ public class PatternMenuListener implements Listener {
             else {
                 player.sendMessage(JUtil.format(plugin.getMessagesFile().getString("no-permission-material")));
                 JUtil.playSound(player, plugin.getPatternMenuFile().getString("pattern-locked-sound"), 1.0f, 0.5f);
+            }
+        }
+    }
+
+    private void clearPatternGlow(InventoryView inventoryView) {
+        for (int slot = 0; slot < inventoryView.getTopInventory().getSize(); slot++) {
+            ItemStack itemInSlot = inventoryView.getTopInventory().getItem(slot);
+            if (itemInSlot != null) {
+                itemInSlot.removeEnchantment(Enchantment.PROTECTION);
             }
         }
     }

@@ -3,7 +3,6 @@ package me.skript.joltingtrims.menus;
 import me.skript.joltingtrims.data.DataManager;
 import me.skript.joltingtrims.data.PlayerData;
 import me.skript.joltingtrims.JoltingTrims;
-import me.skript.joltinglib.items.JItemBuilder;
 import me.skript.joltinglib.inventories.JMenu;
 import me.skript.joltingtrims.utilities.JUtil;
 import org.bukkit.Material;
@@ -72,15 +71,11 @@ public class PatternMenu extends JMenu {
                             }
                         }
 
-                        ItemStack patItem = JUtil.hideVanillaTooltipData(new JItemBuilder(Material.getMaterial(patName + "_ARMOR_TRIM_SMITHING_TEMPLATE"))
-                                .setAmount(1)
-                                .setDisplayName(plugin.getPatternMenuFile().getString("patterns-name").replace("%PATTERN%", JUtil.capitalizeWords(patName)))
-                                .setLoreFromStringList(itemLore)
-                                .hideItemFlags()
-                                .build());
+                        Material patternMaterial = JUtil.getPatternMaterial(patSection);
+                        ItemStack patItem = JUtil.buildPatternItem(patSection, itemLore);
 
                         // Check if this pattern matches the selected TrimPattern
-                        if (selectedTrimPattern != null && JUtil.convertToTrimPattern(Material.getMaterial(patName + "_ARMOR_TRIM_SMITHING_TEMPLATE")) == selectedTrimPattern) {
+                        if (selectedTrimPattern != null && JUtil.convertToTrimPattern(patternMaterial) == selectedTrimPattern) {
                             // Add the glowing enchantment
                             patItem.addUnsafeEnchantment(Enchantment.PROTECTION, 1);
                         }
