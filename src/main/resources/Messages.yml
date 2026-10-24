@@ -16,3 +16,16 @@ files-reload: "&3&l(!) &7All configuration files have been reloaded!"
 no-permission-material: "&4&l(!) &7You do not have access to use this material!"
 no-permission-pattern: "&4&l(!) &7You do not have access to use this pattern!"
 no-permission-command: "&4&l(!) &7You do not have access to run this command!"
+
+
+# Toast notifications: t = information, c = request/invitation, g = milestone.
+# Uses JoltingLib and respects JoltingCore player notification preferences.
+# custom-model-data: 0 disables the custom model. Text supports MiniMessage and | for a new line.
+toasts:
+  applied:
+    enabled: true
+    type: 't'
+    material: CHARCOAL
+    custom-model-data: 109
+    message: '<green>Armour trim applied!'
+

@@ -399,6 +399,11 @@ public class JUtil {
     }
 
     public static void showToast(Player player) {
+        if (JoltingTrims.getInstance().getMessagesFile().isConfigurationSection("toasts.applied")) {
+            me.skript.joltinglib.toasts.JConfiguredToast.send(JoltingTrims.getInstance(), JoltingTrims.getInstance().getMessagesFile(),
+                    "toasts.applied", player, java.util.Map.of());
+            return;
+        }
         if(JoltingTrims.getInstance().getConfigurationFile().getBoolean("toast-enabled")) {
             new JToastBuilder()
                     .setPlayer(player)

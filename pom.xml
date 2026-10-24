@@ -6,7 +6,7 @@
 
     <groupId>me.skript</groupId>
     <artifactId>JoltingTrims</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
 
     <name>JoltingTrims</name>
@@ -68,9 +68,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.xMystik</groupId>
+            <groupId>me.skript</groupId>
             <artifactId>JoltingLib</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.3</version>
         </dependency>
     </dependencies>
 </project>
